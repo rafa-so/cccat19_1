@@ -9,6 +9,7 @@
     isPassenger: false
   });
   const accountId = ref("");
+  const status = ref("");
 
   function fill() {
     form.value.name = "John Doe";
@@ -29,31 +30,36 @@
 
     const output = await response.json();
     accountId.value = output.accountId;
+    status.value = "success";
   }
 </script>
 
 <template>
   <div>
-    <input type="text" placeholder="name" v-model="form.name"/>
+    <input type="text" class="input-name" placeholder="name" v-model="form.name"/>
   </div>
   <div>
-    <input type="text" placeholder="email" v-model="form.email"/>
+    <input type="text" class="input-email" placeholder="email" v-model="form.email"/>
   </div>
   <div>
-    <input type="text" placeholder="cpf" v-model="form.cpf"/>
+    <input type="text" class="input-cpf" placeholder="cpf" v-model="form.cpf"/>
   </div>
   <div>
-    <input type="text" placeholder="password" v-model="form.password"/>
+    <input type="text" class="input-password" placeholder="password" v-model="form.password"/>
   </div>
   <div>
-    <input type="checkbox" v-model="form.isPassenger"/> Passenger
+    <input type="checkbox" class="input-is-passenger" v-model="form.isPassenger"/> Passenger
   </div>
   {{ form }}
   <br />
   {{ accountId }}
   <br />
+    <span class="span-status">
+      {{ status }}
+    </span>
+  <br />
   <div>
-    <button @click="signup()">Signup</button>
+    <button class ="button-signup" @click="signup()">Signup</button>
     <button @click="fill()">Fill</button>
   </div>
 </template>
