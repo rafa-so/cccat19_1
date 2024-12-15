@@ -64,7 +64,7 @@ test("Não deve criar uma conta de motorista com placa inválida", async () => {
 
     const responseSignup = await axios.post('http://localhost:3000/signup', input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-5);
+    expect(outputSignup.message).toBe("Invalid Car Plate");
 });
 
 test("Não deve criar uma conta de passageiro com nome inválido", async () => {
@@ -78,7 +78,7 @@ test("Não deve criar uma conta de passageiro com nome inválido", async () => {
 
     const responseSignup = await axios.post('http://localhost:3000/signup', input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-3);
+    expect(outputSignup.message).toBe("Invalid Name");
 });
 
 test("Não deve criar uma conta de passageiro com cpf inválido", async () => {
@@ -93,7 +93,7 @@ test("Não deve criar uma conta de passageiro com cpf inválido", async () => {
 
     const responseSignup = await axios.post('http://localhost:3000/signup', input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-1);
+    expect(outputSignup.message).toBe("Invalid CPF");
 });
 
 test("Não deve criar uma conta de passageiro com email inválido", async () => {
@@ -107,7 +107,7 @@ test("Não deve criar uma conta de passageiro com email inválido", async () => 
 
     const responseSignup = await axios.post('http://localhost:3000/signup', input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-2);
+    expect(outputSignup.message).toBe("Invalid Email");
 });
 
 test("Não deve criar uma conta de passageiro duplicada", async () => {
@@ -122,5 +122,5 @@ test("Não deve criar uma conta de passageiro duplicada", async () => {
     await axios.post('http://localhost:3000/signup', input);
     const responseSignup = await axios.post('http://localhost:3000/signup', input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-4);
+    expect(outputSignup.message).toBe("Duplicated Account");
 });
