@@ -10,6 +10,7 @@
   });
   const accountId = ref("");
   const status = ref("");
+  const message = ref("");
 
   function fill() {
     form.value.name = "John Doe";
@@ -29,8 +30,13 @@
     });
 
     const output = await response.json();
-    accountId.value = output.accountId;
-    status.value = "success";
+    if (output.accountId) {
+      accountId.value = output.accountId;
+      status.value = "success";
+    } else {
+      message.value = output.message
+      status.value = "error";
+    }
   }
 </script>
 
@@ -56,6 +62,10 @@
   <br />
     <span class="span-status">
       {{ status }}
+    </span>
+  <br />
+  <span class="span-message">
+      {{ message }}
     </span>
   <br />
   <div>
