@@ -21,8 +21,8 @@ export async function signup(input: any) {
 		email: input.email,
 		cpf: input.cpf,
 		password: input.password,
+		isPassenger: input.isPassenger,
 		carPlate: input.carPlate,
-		isPassenger: input.isPassenter,
 		isDriver: input.isDriver
 	}
 
