@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors"; 
-import { signup } from "./service";
-import { getAccountById } from "./data";
+import Service from "./service";
+import { servicesVersion } from "typescript";
 
 const app = express();
 app.use(express.json());
@@ -10,7 +10,8 @@ app.use(cors());
 app.post("/signup", async function (req, res) {
 	const input = req.body;	
 	try {
-		const output = await signup(input);
+		const service = new Service();
+		const output = await service.signup(input);
 		res.json(output);
 	} catch (e: any) {
 		res.status(422).json({ message: e.message });
@@ -18,7 +19,8 @@ app.post("/signup", async function (req, res) {
 });
 
 app.get("/accounts/:accountId", async function (req, res) {
-	const output = await getAccountById(req.params.accountId)
+	const service = new Service();
+	const output = await service.getAccount(req.params.accountId);
 	res.json(output);
 });
 

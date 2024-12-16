@@ -1,4 +1,4 @@
-import { getAccount, signup } from '../src/service';
+import Service from '../src/service';
 
 test("Deve criar um passageiro com sucesso", async () => {
     const input = {
@@ -9,8 +9,9 @@ test("Deve criar um passageiro com sucesso", async () => {
         isPassenger: true
     }
 
-    const outputSignup = await signup(input);
-    const responseGetAccount = await getAccount(outputSignup.accountId);
+    const service = new Service();
+    const outputSignup = await service.signup(input);
+    const responseGetAccount = await service.getAccount(outputSignup.accountId);
     expect(outputSignup.accountId).toBeDefined();
     expect(responseGetAccount.name).toBe(input.name);
     expect(responseGetAccount.email).toBe(input.email);
@@ -29,8 +30,9 @@ test("Deve criar uma conta de motorista", async () => {
         isDriver: true
     }
 
-    const outputSignup = await signup(input);
-    const responseGetAccount = await getAccount(outputSignup.accountId);
+    const service = new Service();
+    const outputSignup = await service.signup(input);
+    const responseGetAccount = await service.getAccount(outputSignup.accountId);
     expect(outputSignup.accountId).toBeDefined();
     expect(responseGetAccount.name).toBe(input.name);
     expect(responseGetAccount.email).toBe(input.email);
@@ -49,7 +51,8 @@ test("Não deve criar uma conta de motorista com placa inválida", async () => {
         isDriver: true
     }
 
-    await expect(signup(input)).rejects.toThrow(new Error("Invalid Car Plate"));
+    const service = new Service();
+    await expect(service.signup(input)).rejects.toThrow(new Error("Invalid Car Plate"));
 });
 
 test("Não deve criar uma conta de passageiro com nome inválido", async () => {
@@ -61,7 +64,8 @@ test("Não deve criar uma conta de passageiro com nome inválido", async () => {
         isPassenger: true
     }
 
-    await expect(signup(input)).rejects.toThrow(new Error("Invalid Name"));
+    const service = new Service();
+    await expect(service.signup(input)).rejects.toThrow(new Error("Invalid Name"));
 });
 
 test("Não deve criar uma conta de passageiro com cpf inválido", async () => {
@@ -74,7 +78,8 @@ test("Não deve criar uma conta de passageiro com cpf inválido", async () => {
         isPassenger: true
     }
 
-    await expect(signup(input)).rejects.toThrow(new Error("Invalid CPF"));
+    const service = new Service();
+    await expect(service.signup(input)).rejects.toThrow(new Error("Invalid CPF"));
 });
 
 test("Não deve criar uma conta de passageiro com email inválido", async () => {
@@ -86,8 +91,8 @@ test("Não deve criar uma conta de passageiro com email inválido", async () => 
         isPassenger: true
     }
 
-
-    await expect(signup(input)).rejects.toThrow(new Error("Invalid Email"));
+    const service = new Service();
+    await expect(service.signup(input)).rejects.toThrow(new Error("Invalid Email"));
 });
 
 test("Não deve criar uma conta de passageiro duplicada", async () => {
@@ -99,6 +104,7 @@ test("Não deve criar uma conta de passageiro duplicada", async () => {
         isPassenger: true
     }
 
-    await signup(input);
-    await expect(signup(input)).rejects.toThrow(new Error("Duplicated Account"));
+    const service = new Service();
+    await service.signup(input);
+    await expect(service.signup(input)).rejects.toThrow(new Error("Duplicated Account"));
 });
