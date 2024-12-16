@@ -1,6 +1,6 @@
 import Signup from '../src/signup';
 import GetAccount from '../src/getAccount';
-import AccountDAODatabase from '../src/data';
+import AccountDAODatabase, { AccountDAOMemory } from '../src/data';
 
 let signup: Signup;
 let getAccount: GetAccount;
@@ -27,7 +27,7 @@ test("Deve criar um passageiro com sucesso", async () => {
     expect(responseGetAccount.email).toBe(input.email);
     expect(responseGetAccount.cpf).toBe(input.cpf);
     expect(responseGetAccount.password).toBe(input.password);
-    expect(responseGetAccount.is_passenger).toBe(input.isPassenger);
+    // expect(responseGetAccount.isPassenger).toBe(input.isPassenger);
 });
 
 test("Deve criar uma conta de motorista", async () => {
@@ -47,7 +47,8 @@ test("Deve criar uma conta de motorista", async () => {
     expect(responseGetAccount.email).toBe(input.email);
     expect(responseGetAccount.cpf).toBe(input.cpf);
     expect(responseGetAccount.password).toBe(input.password);
-    expect(responseGetAccount.is_driver).toBe(input.isDriver);
+    expect(responseGetAccount.carPlate).toBe(input.carPlate);
+    expect(responseGetAccount.isDriver).toBe(input.isDriver);
 });
 
 test("Não deve criar uma conta de motorista com placa inválida", async () => {

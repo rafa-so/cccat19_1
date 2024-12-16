@@ -30,3 +30,23 @@ export default class AccountDAODatabase implements AccountDAO {
 		await connection.$pool.end();
 	}
 }
+
+export class AccountDAOMemory implements AccountDAO {
+	accounts: any[];
+
+	constructor() {
+		this.accounts = [];
+	}
+
+	async  getAccountByEmail( email: string ) {
+		return this.accounts.find((account: any) => account.email === email);
+	}
+	
+	async getAccountById( accountId: string ) {
+		return this.accounts.find((account: any) => account.accountId === accountId);
+	}
+	
+	async saveAccount(account: any) {
+		this.accounts.push(account);
+	}
+}
