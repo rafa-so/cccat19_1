@@ -1,6 +1,14 @@
 import pgp from "pg-promise";
+import { SignupData } from "./signup";
+import { GetAccountData } from "./getAccount";
 
-export default class Data {
+export interface AccountDAO extends GetAccountData, SignupData {
+	saveAccount (account: any): Promise<any>;
+	getAccountByEmail (email: string): Promise<any>;
+	getAccountById (id: string): Promise<any>;
+}
+
+export default class AccountDAODatabase implements AccountDAO {
 	async  getAccountByEmail( email: string ) {
 		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
 		const [accountData] = await connection.query("select * from ccca.account where email = $1", [email]);
@@ -21,5 +29,4 @@ export default class Data {
 			[account.accountId, account.name, account.email, account.cpf, account.carPlate, !!account.isPassenger, !!account.isDriver, account.password]);
 		await connection.$pool.end();
 	}
-
 }
