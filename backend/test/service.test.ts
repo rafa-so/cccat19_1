@@ -7,6 +7,7 @@ let getAccount: GetAccount;
 
 beforeEach(() => {
     const accountDAO = new AccountDAODatabase();
+    // const accountDAO = new AccountDAOMemory();
     signup = new Signup(accountDAO);
     getAccount = new GetAccount(accountDAO);
 });
@@ -27,7 +28,7 @@ test("Deve criar um passageiro com sucesso", async () => {
     expect(responseGetAccount.email).toBe(input.email);
     expect(responseGetAccount.cpf).toBe(input.cpf);
     expect(responseGetAccount.password).toBe(input.password);
-    // expect(responseGetAccount.isPassenger).toBe(input.isPassenger);
+    expect(responseGetAccount.isPassenger).toBe(input.isPassenger);
 });
 
 test("Deve criar uma conta de motorista", async () => {
