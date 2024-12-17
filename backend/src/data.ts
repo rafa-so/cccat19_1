@@ -1,6 +1,7 @@
 import pgp from "pg-promise";
 import { SignupData } from "./signup";
 import { GetAccountData } from "./getAccount";
+import MailerGateway from "./MailerGateway";
 
 export interface AccountDAO extends GetAccountData, SignupData {
 	saveAccount (account: any): Promise<any>;

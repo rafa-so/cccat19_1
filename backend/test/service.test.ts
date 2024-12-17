@@ -1,6 +1,8 @@
+import sinon from "sinon";
 import Signup from '../src/signup';
 import GetAccount from '../src/getAccount';
 import AccountDAODatabase, { AccountDAOMemory } from '../src/data';
+import { MailerGatewayMemory } from '../src/MailerGateway';
 
 let signup: Signup;
 let getAccount: GetAccount;
@@ -8,7 +10,8 @@ let getAccount: GetAccount;
 beforeEach(() => {
     const accountDAO = new AccountDAODatabase();
     // const accountDAO = new AccountDAOMemory();
-    signup = new Signup(accountDAO);
+    const mailerGateway = new MailerGatewayMemory();
+    signup = new Signup(accountDAO, mailerGateway);
     getAccount = new GetAccount(accountDAO);
 });
 
@@ -29,6 +32,28 @@ test("Deve criar um passageiro com sucesso", async () => {
     expect(responseGetAccount.cpf).toBe(input.cpf);
     expect(responseGetAccount.password).toBe(input.password);
     expect(responseGetAccount.isPassenger).toBe(input.isPassenger);
+});
+
+test.only("Deve criar um passageiro com sucesso com stub", async () => {
+    const mailerStub = sinon.stub(MailerGatewayMemory.prototype, "send").resolves();
+
+    const input = {
+        name: "John Doe",
+        email: `john.doe.${Math.random()}@gmail.com`,
+        cpf: "74582712053",
+        password: '123456',
+        isPassenger: true
+    }
+
+    const outputSignup = await signup.signup(input);
+    const responseGetAccount = await getAccount.getAccount(outputSignup.accountId);
+    expect(outputSignup.accountId).toBeDefined();
+    expect(responseGetAccount.name).toBe(input.name);
+    expect(responseGetAccount.email).toBe(input.email);
+    expect(responseGetAccount.cpf).toBe(input.cpf);
+    expect(responseGetAccount.password).toBe(input.password);
+    expect(responseGetAccount.isPassenger).toBe(input.isPassenger);
+    mailerStub.restore();
 });
 
 test("Deve criar uma conta de motorista", async () => {

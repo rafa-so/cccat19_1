@@ -1,8 +1,12 @@
 import crypto from "crypto";
 import { validateCpf } from "./validateCpf";
+import MailerGateway from "./MailerGateway";
 
 export default class Signup {
-	constructor(readonly serviceData: SignupData){}
+	constructor(
+		readonly serviceData: SignupData,
+		readonly mailerGateway: MailerGateway
+	){}
 
 	isValidName(name: string) {
 		return name.match(/[a-zA-Z] [a-zA-Z]+/);
@@ -35,6 +39,8 @@ export default class Signup {
 		if (!validateCpf(account.cpf)) throw new Error("Invalid CPF");
 		if (account.isDriver && !this.isValidCarPlate(account.carPlate)) throw new Error ("Invalid Car Plate");
 		await this.serviceData.saveAccount(account);
+		await this.mailerGateway.send(account.email, "Welcome", "...");
+		
 		return { accountId: account.accountId };
 	}
 }
