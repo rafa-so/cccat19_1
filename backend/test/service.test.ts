@@ -176,7 +176,7 @@ test("Deve criar um passageiro com sucesso com spy", async () => {
     mailerGatewaySpy.restore();
 });
 
-test.only("Deve criar um passageiro com sucesso com mock", async () => {
+test("Deve criar um passageiro com sucesso com mock", async () => {
     const mailerGatewayMock = sinon.mock(MailerGatewayMemory.prototype);
 
     const input = {
