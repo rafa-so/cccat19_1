@@ -1,4 +1,4 @@
-import * as crypto from "node:crypto";
+import crypto from "crypto";
 import { AccountDAO } from "./AccoundDAO";
 import { RideDAO } from "./RideDAO";
 
