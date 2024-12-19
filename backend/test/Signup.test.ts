@@ -1,7 +1,7 @@
 import sinon from "sinon";
-import Signup from '../src/signup';
+import Signup from '../src/Signup';
 import GetAccount from '../src/getAccount';
-import AccountDAODatabase, { AccountDAOMemory } from '../src/data';
+import AccountDAODatabase, { AccountDAOMemory } from '../src/AccoundDAO';
 import { MailerGatewayMemory } from '../src/MailerGateway';
 
 let signup: Signup;

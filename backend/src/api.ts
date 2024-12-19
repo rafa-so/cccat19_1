@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors"; 
-import Signup from "./signup";
+import Signup from "./Signup";
 import GetAccount from "./getAccount";
-import AccountDAODatabase from "./data";
+import AccountDAODatabase from "./AccoundDAO";
 import { MailerGatewayMemory } from "./MailerGateway";
 
 const app = express();

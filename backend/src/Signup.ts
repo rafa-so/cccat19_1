@@ -1,10 +1,11 @@
 import crypto from "crypto";
 import { validateCpf } from "./validateCpf";
 import MailerGateway from "./MailerGateway";
+import { AccountDAO } from "./AccoundDAO";
 
 export default class Signup {
 	constructor(
-		readonly serviceData: SignupData,
+		readonly serviceData: AccountDAO,
 		readonly mailerGateway: MailerGateway
 	){}
 
@@ -43,9 +44,4 @@ export default class Signup {
 		
 		return { accountId: account.accountId };
 	}
-}
-
-export interface SignupData {
-	saveAccount (account: any): Promise<any>;
-	getAccountByEmail (email: string): Promise<any>;
 }
