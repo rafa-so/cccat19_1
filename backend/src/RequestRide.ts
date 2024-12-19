@@ -1,3 +1,4 @@
+import * as crypto from "node:crypto";
 import { AccountDAO } from "./AccoundDAO";
 import { RideDAO } from "./RideDAO";
 
@@ -9,7 +10,7 @@ export default class RequestRide {
 
 	async execute(input: any) {
 		const ride = {
-			rideId: crypto.randomUUID()
+			rideId: crypto.randomUUID
 		};
 
 		await this.rideDAO.saveRide(ride);
