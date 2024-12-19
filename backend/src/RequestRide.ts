@@ -1,7 +1,5 @@
-import crypto from "crypto";
-import { validateCpf } from "./validateCpf";
-import MailerGateway from "./MailerGateway";
 import { AccountDAO } from "./AccoundDAO";
+import { RideDAO } from "./RideDAO";
 
 export default class RequestRide {
 	constructor(
@@ -10,7 +8,14 @@ export default class RequestRide {
 	){}
 
 	async execute(input: any) {
-		
+		const ride = {
+			rideId: crypto.randomUUID()
+		};
+
+		await this.rideDAO.saveRide(ride);
+		return {
+			rideId: ride.rideId
+		};
 	}
 }
 

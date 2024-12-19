@@ -3,6 +3,8 @@ import Signup from '../src/Signup';
 import GetAccount from '../src/getAccount';
 import AccountDAODatabase, { AccountDAOMemory } from '../src/AccoundDAO';
 import { MailerGatewayMemory } from '../src/MailerGateway';
+import RequestRide from "../src/RequestRide";
+import RideDAODatabase from "../src/RideDAO";
 
 let signup: Signup;
 let getAccount: GetAccount;
@@ -15,7 +17,7 @@ beforeEach(() => {
     const mailerGateway = new MailerGatewayMemory();
     signup = new Signup(accountDAO, mailerGateway);
     getAccount = new GetAccount(accountDAO);
-    requestRide = new RiquestRide(accountDAO, rideDAO);
+    requestRide = new RequestRide(accountDAO, rideDAO);
 });
 
 test("Deve solicitar uma corrida", async () => {
@@ -35,6 +37,6 @@ test("Deve solicitar uma corrida", async () => {
         toLat: -27.496887588317275,
         toLong: -48.522234807850476,    
     }
-    const outputRequestRide = await requestRide.excute(inputRequestRide);
+    const outputRequestRide = await requestRide.execute(inputRequestRide);
     expect(outputRequestRide).toBeDefined();
 });
