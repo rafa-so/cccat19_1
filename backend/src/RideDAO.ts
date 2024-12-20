@@ -14,12 +14,12 @@ export default class RideDAODatabase implements RideDAO {
 			rideId: rideData.ride_id,
 			passengerId: rideData.passenger_id,
 			driverId: rideData.driver_id,
-			fromLat: rideData.from_lat,
-			fromLong: rideData.from_long,
-			toLat: rideData.to_lat,
-			toLong: rideData.to_long,
-			fare: rideData.fare,
-			distance: rideData.distance,
+			fromLat: parseFloat(rideData.from_lat),
+			fromLong: parseFloat(rideData.from_long),
+			toLat: parseFloat(rideData.to_lat),
+			toLong: parseFloat(rideData.to_long),
+			fare: parseFloat(rideData.fare),
+			distance: parseFloat(rideData.distance),
 			status: rideData.status,
 			date: rideData.date
 		};
@@ -28,7 +28,7 @@ export default class RideDAODatabase implements RideDAO {
 	async saveRide(ride: any) {
 		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
 		await connection.query("INSERT INTO ccca.ride (ride_id, passenger_id, driver_id, from_lat, from_long, to_lat, to_long, fare, distance, status, date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
-			[ride.rideId, ride.passengerId, ride.driver_id, ride.fromLat, ride.from_long, ride.toLat, ride.toLong, ride.fare, ride.distance, ride.staus, ride.date]
+			[ride.rideId, ride.passengerId, ride.driver_id, ride.fromLat, ride.fromLong, ride.toLat, ride.toLong, ride.fare, ride.distance, ride.status, ride.date]
 		)
 		await connection.$pool.end();
 	}

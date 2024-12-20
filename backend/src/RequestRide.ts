@@ -8,19 +8,29 @@ export default class RequestRide {
 		readonly rideDAO: RideDAO
 	){}
 
-	async execute(input: any) {
-		const ride = {
-			rideId: crypto.randomUUID
-		};
+	async execute(input: Input) {
+		const ride = { 
+			rideId: crypto.randomUUID(),
+			passengerId: input.passengerId,
+			fromLat: input.fromLat,
+			fromLong: input.fromLong,
+			toLat: input.toLat,
+			toLong: input.toLong,
+			status: 'requested',
+			fare: 0,
+			distance: 0,
+			date: new Date()
 
-		await this.rideDAO.saveRide(ride);
-		return {
-			rideId: ride.rideId
 		};
+		await this.rideDAO.saveRide(ride);
+		return { rideId: ride.rideId };
 	}
 }
 
-export interface SignupData {
-	saveAccount (account: any): Promise<any>;
-	getAccountByEmail (email: string): Promise<any>;
-}
+type Input = {
+	passengerId: string,
+	fromLat: number,
+	fromLong: number,
+	toLat: number,
+	toLong: number
+} 

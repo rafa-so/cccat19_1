@@ -5,10 +5,12 @@ import AccountDAODatabase, { AccountDAOMemory } from '../src/AccoundDAO';
 import { MailerGatewayMemory } from '../src/MailerGateway';
 import RequestRide from "../src/RequestRide";
 import RideDAODatabase from "../src/RideDAO";
+import GetRide from "../src/GetRide";
 
 let signup: Signup;
 let getAccount: GetAccount;
 let requestRide: RequestRide;
+let getRide: GetRide;
 
 beforeEach(() => {
     const accountDAO = new AccountDAODatabase();
@@ -18,6 +20,7 @@ beforeEach(() => {
     signup = new Signup(accountDAO, mailerGateway);
     getAccount = new GetAccount(accountDAO);
     requestRide = new RequestRide(accountDAO, rideDAO);
+    getRide = new GetRide(accountDAO, rideDAO);
 });
 
 test("Deve solicitar uma corrida", async () => {
@@ -31,12 +34,24 @@ test("Deve solicitar uma corrida", async () => {
 
     const outputSignup = await signup.signup(inputSignup);
     const inputRequestRide = {
-        pessengerId: outputSignup.accountId,
+        passengerId: outputSignup.accountId,
         fromLat: -27.584905257808835,
         fromLong:-48.545022195325124,
         toLat: -27.496887588317275,
         toLong: -48.522234807850476,    
     }
     const outputRequestRide = await requestRide.execute(inputRequestRide);
-    expect(outputRequestRide).toBeDefined();
+    expect(outputRequestRide.rideId).toBeDefined();
+
+    const outputGetRide = await getRide.execute(outputRequestRide.rideId);
+    expect(outputGetRide.rideId).toBe(outputRequestRide.rideId);
+    expect(outputGetRide.passengerId).toBe(inputRequestRide.passengerId);
+    expect(outputGetRide.fromLat).toBe(inputRequestRide.fromLat);
+    expect(outputGetRide.fromLong).toBe(inputRequestRide.fromLong);
+    expect(outputGetRide.toLat).toBe(inputRequestRide.toLat);
+    expect(outputGetRide.toLong).toBe(inputRequestRide.toLong);
+    expect(outputGetRide.status).toBe("requested");
+    expect(outputGetRide.fare).toBe(0);
+    expect(outputGetRide.distance).toBe(0);
 });
+
