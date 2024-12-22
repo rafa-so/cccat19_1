@@ -21,7 +21,7 @@ export default class Signup {
 		return carPlate.match(/[A-Z]{3}[0-9]{4}/)
 	}
 	
-	async signup(input: any) {
+	async execute(input: any) {
 		const account = {
 			accountId: crypto.randomUUID(),
 			name: input.name,

@@ -32,7 +32,7 @@ test("Deve solicitar uma corrida", async () => {
         isPassenger: true
     }
 
-    const outputSignup = await signup.signup(inputSignup);
+    const outputSignup = await signup.execute(inputSignup);
     const inputRequestRide = {
         passengerId: outputSignup.accountId,
         fromLat: -27.584905257808835,
@@ -46,6 +46,7 @@ test("Deve solicitar uma corrida", async () => {
     const outputGetRide = await getRide.execute(outputRequestRide.rideId);
     expect(outputGetRide.rideId).toBe(outputRequestRide.rideId);
     expect(outputGetRide.passengerId).toBe(inputRequestRide.passengerId);
+    expect(outputGetRide.passengerName).toBe(inputSignup.name);
     expect(outputGetRide.fromLat).toBe(inputRequestRide.fromLat);
     expect(outputGetRide.fromLong).toBe(inputRequestRide.fromLong);
     expect(outputGetRide.toLat).toBe(inputRequestRide.toLat);
