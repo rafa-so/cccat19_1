@@ -25,7 +25,8 @@ export default class RequestRide {
 
 		const accountData = await this.accountDAO.getAccountById(input.passengerId);
 		if (!accountData.isPassenger) throw new Error("Account must be from a passenger");
-
+		const hasActiviteRide = await this.rideDAO.hasActiviteRideByPassengerId(input.passengerId);
+		if (hasActiviteRide) throw new Error("Passenger already have an active ride"); 
 		await this.rideDAO.saveRide(ride);
 		return { rideId: ride.rideId };
 	}

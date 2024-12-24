@@ -56,3 +56,45 @@ test("Deve solicitar uma corrida", async () => {
     expect(outputGetRide.distance).toBe(0);
 });
 
+test("Não deve solicitar uma corrida se a conta não for de um passageiro", async () => {
+    const inputSignup = {
+        name: "John Doe",
+        email: `john.doe.${Math.random()}@gmail.com`,
+        cpf: "74582712053",
+        password: '123456',
+        carPlate: "AAA9999",
+        isDriver: true
+    }
+
+    const outputSignup = await signup.execute(inputSignup);
+    const inputRequestRide = {
+        passengerId: outputSignup.accountId,
+        fromLat: -27.584905257808835,
+        fromLong:-48.545022195325124,
+        toLat: -27.496887588317275,
+        toLong: -48.522234807850476,    
+    }
+    await expect(() => requestRide.execute(inputRequestRide)).rejects.toThrow(new Error("Account must be from a passenger"));
+});
+
+test("Não pode solicitar uma corrida se já tiver outra ativa", async () => {
+    const inputSignup = {
+        name: "John Doe",
+        email: `john.doe.${Math.random()}@gmail.com`,
+        cpf: "74582712053",
+        password: '123456',
+        isPassenger: true
+    };
+
+    const outputSignup = await signup.execute(inputSignup);
+    const inputRequestRide = {
+        passengerId: outputSignup.accountId,
+        fromLat: -27.584905257808835,
+        fromLong:-48.545022195325124,
+        toLat: -27.496887588317275,
+        toLong: -48.522234807850476,    
+    };
+
+    await requestRide.execute(inputRequestRide);
+    await expect(() => requestRide.execute(inputRequestRide)).rejects.toThrow(new Error("Passenger already have an active ride"));
+});
