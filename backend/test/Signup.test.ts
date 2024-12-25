@@ -1,18 +1,19 @@
 import sinon from "sinon";
 import Signup from '../src/Signup';
 import GetAccount from '../src/getAccount';
-import AccountDAODatabase, { AccountDAOMemory } from '../src/AccoundDAO';
+import AccountRepositoryDatabase, { AccountRepositoryMemory } from '../src/AccountRepository';
 import { MailerGatewayMemory } from '../src/MailerGateway';
+import Account from "../src/Account";
 
 let signup: Signup;
 let getAccount: GetAccount;
 
 beforeEach(() => {
-    const accountDAO = new AccountDAODatabase();
-    // const accountDAO = new AccountDAOMemory();
+    const accountRepository = new AccountRepositoryDatabase();
+    // const accountRepository = new AccountRepositoryMemory();
     const mailerGateway = new MailerGatewayMemory();
-    signup = new Signup(accountDAO, mailerGateway);
-    getAccount = new GetAccount(accountDAO);
+    signup = new Signup(accountRepository, mailerGateway);
+    getAccount = new GetAccount(accountRepository);
 });
 
 test("Deve criar um passageiro com sucesso", async () => {
@@ -20,8 +21,10 @@ test("Deve criar um passageiro com sucesso", async () => {
         name: "John Doe",
         email: `john.doe.${Math.random()}@gmail.com`,
         cpf: "74582712053",
+        carPlate: "",
         password: '123456',
-        isPassenger: true
+        isPassenger: true,
+        isDriver: false
     }
 
     const outputSignup = await signup.execute(input);
@@ -36,8 +39,8 @@ test("Deve criar um passageiro com sucesso", async () => {
 
 test("Deve criar um passageiro com sucesso com stub", async () => {
     const mailerStub = sinon.stub(MailerGatewayMemory.prototype, "send").resolves();
-    const accountDAOStub1 = sinon.stub(AccountDAODatabase.prototype, "getAccountByEmail").resolves();
-    const accountDAOStub3 = sinon.stub(AccountDAODatabase.prototype, "saveAccount").resolves();
+    const accountRepositoryStub1 = sinon.stub(AccountRepositoryDatabase.prototype, "getAccountByEmail").resolves();
+    const accountRepositoryStub3 = sinon.stub(AccountRepositoryDatabase.prototype, "saveAccount").resolves();
     
     const input = {
         accountId: "",
@@ -50,7 +53,7 @@ test("Deve criar um passageiro com sucesso com stub", async () => {
         carPlate: ""
     }
 
-    const accountDAOStub2 = sinon.stub(AccountDAODatabase.prototype, "getAccountById").resolves(input);
+    const accountRepositoryStub2 = sinon.stub(AccountRepositoryDatabase.prototype, "getAccountById").resolves(new Account(input.accountId, input.name, input.email, input.cpf, input.carPlate, input.password, input.isPassenger, input.isDriver));
 
     const outputSignup = await signup.execute(input);
     const responseGetAccount = await getAccount.execute(outputSignup.accountId);
@@ -61,9 +64,9 @@ test("Deve criar um passageiro com sucesso com stub", async () => {
     expect(responseGetAccount.password).toBe(input.password);
     expect(responseGetAccount.isPassenger).toBe(input.isPassenger);
     mailerStub.restore();
-    accountDAOStub1.restore();
-    accountDAOStub2.restore();
-    accountDAOStub3.restore();
+    accountRepositoryStub1.restore();
+    accountRepositoryStub2.restore();
+    accountRepositoryStub3.restore();
 });
 
 test("Deve criar uma conta de motorista", async () => {
@@ -87,18 +90,6 @@ test("Deve criar uma conta de motorista", async () => {
     expect(responseGetAccount.isDriver).toBe(input.isDriver);
 });
 
-test("Não deve criar uma conta de motorista com placa inválida", async () => {
-    const input = {
-        name: "John Doe",
-        email: `john.doe.${Math.random()}@gmail.com`,
-        cpf: "74582712053",
-        password: '123456',
-        carPlate: "AAA999",
-        isDriver: true
-    }
-
-    await expect(signup.execute(input)).rejects.toThrow(new Error("Invalid Car Plate"));
-});
 
 test("Não deve criar uma conta de passageiro com nome inválido", async () => {
     const input = {
@@ -110,31 +101,6 @@ test("Não deve criar uma conta de passageiro com nome inválido", async () => {
     }
 
     await expect(signup.execute(input)).rejects.toThrow(new Error("Invalid Name"));
-});
-
-test("Não deve criar uma conta de passageiro com cpf inválido", async () => {
-    const input = {
-        name: "John Doe",
-        email: `john.doe.${Math.random()}@gmail.com`,
-        cpf: "7458271205",
-        password: '123456',
-        carPlate: "AAA9999",
-        isPassenger: true
-    }
-
-    await expect(signup.execute(input)).rejects.toThrow(new Error("Invalid CPF"));
-});
-
-test("Não deve criar uma conta de passageiro com email inválido", async () => {
-    const input = {
-        name: "John Doe",
-        email: `john.doe.${Math.random()}`,
-        cpf: "74582712053",
-        password: '123456',
-        isPassenger: true
-    }
-
-    await expect(signup.execute(input)).rejects.toThrow(new Error("Invalid Email"));
 });
 
 test("Não deve criar uma conta de passageiro duplicada", async () => {

@@ -31,6 +31,11 @@ export default class Account {
     }
 
     static create (name: string, email: string, cpf: string, carPlate: string, password: string, isPassenger: boolean, isDriver: boolean) {
+        console.log("\n --- || DEBUG ACCOUNT OBJ || --- \n",
+            {
+                name, email, cpf, carPlate, password, isPassenger, isDriver
+            }
+        );
         const accountId = crypto.randomUUID();
         return new Account(accountId, name, email, cpf, carPlate, password, isPassenger, isDriver);
     }

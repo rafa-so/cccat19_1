@@ -1,7 +1,7 @@
 import sinon from "sinon";
 import Signup from '../src/Signup';
 import GetAccount from '../src/getAccount';
-import AccountDAODatabase, { AccountDAOMemory } from '../src/AccoundDAO';
+import AccountDAODatabase, { AccountDAOMemory } from '../src/AccountRepository';
 import { MailerGatewayMemory } from '../src/MailerGateway';
 import RequestRide from "../src/RequestRide";
 import RideDAODatabase from "../src/RideDAO";

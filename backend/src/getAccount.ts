@@ -1,7 +1,7 @@
-import { AccountDAO } from "./AccoundDAO";
+import { AccountRepository } from "./AccountRepository";
 
 export default class GetAccount {
-	constructor(readonly serviceData: AccountDAO){}
+	constructor(readonly serviceData: AccountRepository){}
 	
 	async execute(accountId: string) {
 		const accountData = await this.serviceData.getAccountById(accountId);

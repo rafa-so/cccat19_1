@@ -1,14 +1,15 @@
 import MailerGateway from "./MailerGateway";
-import { AccountDAO } from "./AccoundDAO";
+import { AccountRepository } from "./AccountRepository";
 import Account from "./Account";
 
 export default class Signup {
 	constructor(
-		readonly serviceData: AccountDAO,
+		readonly serviceData: AccountRepository,
 		readonly mailerGateway: MailerGateway
 	){}
 	
 	async execute(input: any) {
+		console.log(input)
 		const account = Account.create(input.name, input.email, input.cpf, input.carPlate, input.password, input.isPassenger, input.isDriver);
 		const existingAccount = await this.serviceData.getAccountByEmail(account.email);
 		if (existingAccount) throw new Error("Duplicated Account");

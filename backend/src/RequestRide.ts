@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { AccountDAO } from "./AccoundDAO";
+import { AccountDAO } from "./AccountRepository";
 import { RideDAO } from "./RideDAO";
 
 export default class RequestRide {
