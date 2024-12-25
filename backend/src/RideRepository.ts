@@ -1,29 +1,18 @@
 import pgp from "pg-promise";
+import Ride from "./Ride";
 
-export interface RideDAO {
-	saveRide (ride: any): Promise<any>;
-	getRideById (id: string): Promise<any>;
+export interface RideRepository {
+	saveRide (ride: Ride): Promise<void>;
+	getRideById (id: string): Promise<Ride>;
 	hasActiviteRideByPassengerId(passengerId: string): Promise<boolean>;
 }
 
-export default class RideDAODatabase implements RideDAO {
+export default class RideRepositoryDatabase implements RideRepository {
 	async getRideById( rideId: string ) {
 		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
 		const [rideData] = await connection.query("select * from ccca.ride where ride_id = $1", [rideId]);
 		await connection.$pool.end();
-		return {
-			rideId: rideData.ride_id,
-			passengerId: rideData.passenger_id,
-			driverId: rideData.driver_id,
-			fromLat: parseFloat(rideData.from_lat),
-			fromLong: parseFloat(rideData.from_long),
-			toLat: parseFloat(rideData.to_lat),
-			toLong: parseFloat(rideData.to_long),
-			fare: parseFloat(rideData.fare),
-			distance: parseFloat(rideData.distance),
-			status: rideData.status,
-			date: rideData.date
-		};
+		return new Ride( rideData.ride_id, rideData.passenger_id, rideData.driver_id, parseFloat(rideData.from_lat), parseFloat(rideData.from_long), parseFloat(rideData.to_lat), parseFloat(rideData.to_long), rideData.status, parseFloat(rideData.fare), parseFloat(rideData.distance), rideData.date);
 	}
 	
 	async saveRide(ride: any) {
@@ -42,7 +31,7 @@ export default class RideDAODatabase implements RideDAO {
 	}
 }
 
-export class RideDAOMemory implements RideDAO {
+export class RideRepositoryMemory implements RideRepository {
 	accounts: any[];
 
 	constructor() {

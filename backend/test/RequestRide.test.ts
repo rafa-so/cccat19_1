@@ -1,10 +1,10 @@
 import sinon from "sinon";
 import Signup from '../src/Signup';
 import GetAccount from '../src/getAccount';
-import AccountDAODatabase, { AccountDAOMemory } from '../src/AccountRepository';
+import AccountRepositoryDatabase, { AccountRepositoryMemory } from '../src/AccountRepository';
 import { MailerGatewayMemory } from '../src/MailerGateway';
 import RequestRide from "../src/RequestRide";
-import RideDAODatabase from "../src/RideDAO";
+import RideRepositoryDatabase from "../src/RideRepository";
 import GetRide from "../src/GetRide";
 
 let signup: Signup;
@@ -13,14 +13,14 @@ let requestRide: RequestRide;
 let getRide: GetRide;
 
 beforeEach(() => {
-    const accountDAO = new AccountDAODatabase();
-    const rideDAO = new RideDAODatabase();
-    // const accountDAO = new AccountDAOMemory();
+    const accountRepository = new AccountRepositoryDatabase();
+    const rideRepository = new RideRepositoryDatabase();
+    // const accountRepository = new AccountRepositoryMemory();
     const mailerGateway = new MailerGatewayMemory();
-    signup = new Signup(accountDAO, mailerGateway);
-    getAccount = new GetAccount(accountDAO);
-    requestRide = new RequestRide(accountDAO, rideDAO);
-    getRide = new GetRide(accountDAO, rideDAO);
+    signup = new Signup(accountRepository, mailerGateway);
+    getAccount = new GetAccount(accountRepository);
+    requestRide = new RequestRide(accountRepository, rideRepository);
+    getRide = new GetRide(accountRepository, rideRepository);
 });
 
 test("Deve solicitar uma corrida", async () => {

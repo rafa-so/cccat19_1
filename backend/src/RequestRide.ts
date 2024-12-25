@@ -1,32 +1,20 @@
-import crypto from "crypto";
-import { AccountDAO } from "./AccountRepository";
-import { RideDAO } from "./RideDAO";
+import { AccountRepository } from "./AccountRepository";
+import { RideRepository } from "./RideRepository";
+import Ride from "./Ride";
 
 export default class RequestRide {
 	constructor(
-		readonly accountDAO: AccountDAO,
-		readonly rideDAO: RideDAO
+		readonly accountRepository: AccountRepository,
+		readonly rideRepository: RideRepository
 	){}
 
 	async execute(input: Input) {
-		const accountData = await this.accountDAO.getAccountById(input.passengerId);
+		const accountData = await this.accountRepository.getAccountById(input.passengerId);
 		if (!accountData.isPassenger) throw new Error("Account must be from a passenger");
-		const hasActiviteRide = await this.rideDAO.hasActiviteRideByPassengerId(input.passengerId);
+		const hasActiviteRide = await this.rideRepository.hasActiviteRideByPassengerId(input.passengerId);
+		const ride = Ride.create(input.passengerId, input.fromLat, input.fromLong, input.toLat, input.toLong);
 		if (hasActiviteRide) throw new Error("Passenger already have an active ride"); 
-		const ride = { 
-			rideId: crypto.randomUUID(),
-			passengerId: input.passengerId,
-			fromLat: input.fromLat,
-			fromLong: input.fromLong,
-			toLat: input.toLat,
-			toLong: input.toLong,
-			status: 'requested',
-			fare: 0,
-			distance: 0,
-			date: new Date()
-
-		};
-		await this.rideDAO.saveRide(ride);
+		await this.rideRepository.saveRide(ride);
 		return { rideId: ride.rideId };
 	}
 }

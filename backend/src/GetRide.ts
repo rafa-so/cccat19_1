@@ -1,19 +1,18 @@
 import crypto from "crypto";
 import { AccountRepository } from "./AccountRepository";
-import { RideDAO } from "./RideDAO";
+import { RideRepository } from "./RideRepository";
 import Account from "./Account";
 
 export default class GetRide {
 	constructor(
-		readonly accountDAO: AccountRepository,
-		readonly rideDAO: RideDAO
+		readonly accountRepository: AccountRepository,
+		readonly rideRepository: RideRepository
 	){}
 
 	async execute(rideId: string): Promise<Output>{
-		const rideData = await this.rideDAO.getRideById(rideId);
-		const passengerData: Account = await this.accountDAO.getAccountById(rideData.passengerId);
-		rideData.passengerName = passengerData.name;
-		return rideData;	
+		const ride = await this.rideRepository.getRideById(rideId);
+		const passengerAccount: Account = await this.accountRepository.getAccountById(ride.passengerId);
+		return { ...ride, passengerName: passengerAccount.name }
 	}
 }
 
@@ -21,7 +20,7 @@ type Output = {
 	rideId: string,
 	passengerId: string,
 	passengerName: string,
-	driverId: string,
+	driverId: string | null,
 	fromLat: number,
 	fromLong: number,
 	toLat: number,
