@@ -3,7 +3,7 @@ import GetAccount from "./getAccount";
 import AccountRepositoryDatabase from "./AccountRepository";
 import { MailerGatewayMemory } from "./MailerGateway";
 import { PgPromiseAdapter } from "./DatabaseConnecction";
-import { ExpressAdapter } from "./HpptServer";
+import { ExpressAdapter } from "./HttpServer";
 
 const httpServer = new ExpressAdapter();
 const connection = new PgPromiseAdapter();

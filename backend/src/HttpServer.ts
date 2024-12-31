@@ -25,8 +25,8 @@ export class ExpressAdapter implements HttpServer {
             }
         })
     }
+
     listen(port: number): void {
         this.app.listen(port);
     }
-
 }
