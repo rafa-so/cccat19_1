@@ -6,21 +6,28 @@ import { MailerGatewayMemory } from '../src/MailerGateway';
 import RequestRide from "../src/RequestRide";
 import RideRepositoryDatabase from "../src/RideRepository";
 import GetRide from "../src/GetRide";
+import DatabaseConnection, { PgPromiseAdapter } from "../src/DatabaseConnecction";
 
 let signup: Signup;
 let getAccount: GetAccount;
 let requestRide: RequestRide;
 let getRide: GetRide;
+let connection: DatabaseConnection;
 
 beforeEach(() => {
-    const accountRepository = new AccountRepositoryDatabase();
-    const rideRepository = new RideRepositoryDatabase();
+    connection = new PgPromiseAdapter();
+    const accountRepository = new AccountRepositoryDatabase(connection);
+    const rideRepository = new RideRepositoryDatabase(connection);
     // const accountRepository = new AccountRepositoryMemory();
     const mailerGateway = new MailerGatewayMemory();
     signup = new Signup(accountRepository, mailerGateway);
     getAccount = new GetAccount(accountRepository);
     requestRide = new RequestRide(accountRepository, rideRepository);
     getRide = new GetRide(accountRepository, rideRepository);
+});
+
+afterEach(async () => {
+    await connection.close();
 });
 
 test("Deve solicitar uma corrida", async () => {

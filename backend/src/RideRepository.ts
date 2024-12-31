@@ -1,5 +1,5 @@
-import pgp from "pg-promise";
 import Ride from "./Ride";
+import DatabaseConnection from "./DatabaseConnecction";
 
 export interface RideRepository {
 	saveRide (ride: Ride): Promise<void>;
@@ -8,25 +8,33 @@ export interface RideRepository {
 }
 
 export default class RideRepositoryDatabase implements RideRepository {
+	constructor(readonly connection: DatabaseConnection){}
+
 	async getRideById( rideId: string ) {
-		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
-		const [rideData] = await connection.query("select * from ccca.ride where ride_id = $1", [rideId]);
-		await connection.$pool.end();
-		return new Ride( rideData.ride_id, rideData.passenger_id, rideData.driver_id, parseFloat(rideData.from_lat), parseFloat(rideData.from_long), parseFloat(rideData.to_lat), parseFloat(rideData.to_long), rideData.status, parseFloat(rideData.fare), parseFloat(rideData.distance), rideData.date);
+		const [rideData] = await this.connection.query("select * from ccca.ride where ride_id = $1", [rideId]);
+		return new Ride(
+			rideData.ride_id, 
+			rideData.passenger_id, 
+			rideData.driver_id, 
+			parseFloat(rideData.from_lat), 
+			parseFloat(rideData.from_long), 
+			parseFloat(rideData.to_lat), 
+			parseFloat(rideData.to_long), 
+			rideData.status, 
+			parseFloat(rideData.fare), 
+			parseFloat(rideData.distance), 
+			rideData.date
+		);
 	}
 	
 	async saveRide(ride: any) {
-		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
-		await connection.query("INSERT INTO ccca.ride (ride_id, passenger_id, driver_id, from_lat, from_long, to_lat, to_long, fare, distance, status, date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+		await this.connection.query("INSERT INTO ccca.ride (ride_id, passenger_id, driver_id, from_lat, from_long, to_lat, to_long, fare, distance, status, date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
 			[ride.rideId, ride.passengerId, ride.driver_id, ride.fromLat, ride.fromLong, ride.toLat, ride.toLong, ride.fare, ride.distance, ride.status, ride.date]
 		)
-		await connection.$pool.end();
 	}
 
 	async hasActiviteRideByPassengerId( passengerId: string ) {
-		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
-		const [rideData] = await connection.query("SELECT 1 FROM ccca.ride WHERE passenger_id = $1 AND status NOT IN ('completed', 'cancelled') LIMIT 1", [passengerId]);
-		await connection.$pool.end();
+		const [rideData] = await this.connection.query("SELECT 1 FROM ccca.ride WHERE passenger_id = $1 AND status NOT IN ('completed', 'cancelled') LIMIT 1", [passengerId]);
 		return !!rideData;
 	}
 }

@@ -4,16 +4,23 @@ import GetAccount from '../src/getAccount';
 import AccountRepositoryDatabase, { AccountRepositoryMemory } from '../src/AccountRepository';
 import { MailerGatewayMemory } from '../src/MailerGateway';
 import Account from "../src/Account";
+import DatabaseConnection, { PgPromiseAdapter } from "../src/DatabaseConnecction";
 
 let signup: Signup;
 let getAccount: GetAccount;
+let connection: DatabaseConnection;
 
 beforeEach(() => {
-    const accountRepository = new AccountRepositoryDatabase();
+    connection = new PgPromiseAdapter();
+    const accountRepository = new AccountRepositoryDatabase(connection);
     // const accountRepository = new AccountRepositoryMemory();
     const mailerGateway = new MailerGatewayMemory();
     signup = new Signup(accountRepository, mailerGateway);
     getAccount = new GetAccount(accountRepository);
+});
+
+afterEach(async () => {
+    await connection.close();
 });
 
 test("Deve criar um passageiro com sucesso", async () => {

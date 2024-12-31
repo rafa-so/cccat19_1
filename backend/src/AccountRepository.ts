@@ -1,5 +1,5 @@
-import pgp from "pg-promise";
 import Account from "./Account";
+import DatabaseConnection from "./DatabaseConnecction";
 
 export interface AccountRepository {
 	saveAccount (account: Account): Promise<any>;
@@ -8,10 +8,10 @@ export interface AccountRepository {
 }
 
 export default class AccountRepositoryDatabase implements AccountRepository {
+	constructor(readonly connection: DatabaseConnection){}
+
 	async  getAccountByEmail( email: string ) {
-		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
-		const [accountData] = await connection.query("select * from ccca.account where email = $1", [email]);
-		await connection.$pool.end();
+		const [accountData] = await this.connection.query("select * from ccca.account where email = $1", [email]);
 		if (!accountData) return;
 		return new Account(
 			accountData.account_id,
@@ -26,9 +26,7 @@ export default class AccountRepositoryDatabase implements AccountRepository {
 	}
 	
 	async getAccountById( accountId: string ) {
-		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
-		const [accountData] = await connection.query("select * from ccca.account where account_id = $1", [accountId]);
-		await connection.$pool.end();
+		const [accountData] = await this.connection.query("select * from ccca.account where account_id = $1", [accountId]);
 		return new Account(
 			accountData.account_id,
 			accountData.name,
@@ -42,10 +40,8 @@ export default class AccountRepositoryDatabase implements AccountRepository {
 	}
 	
 	async saveAccount( account: Account ) {
-		const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
-		await connection.query("insert into ccca.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver, password) values ($1, $2, $3, $4, $5, $6, $7, $8)", 
+		await this.connection.query("insert into ccca.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver, password) values ($1, $2, $3, $4, $5, $6, $7, $8)", 
 			[account.accountId, account.name, account.email, account.cpf, account.carPlate, !!account.isPassenger, !!account.isDriver, account.password]);
-		await connection.$pool.end();
 	}
 }
 
