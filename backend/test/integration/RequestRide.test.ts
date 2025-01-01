@@ -1,12 +1,12 @@
 import sinon from "sinon";
-import Signup from '../src/application/use_case/Signup';
-import GetAccount from '../src/application/use_case/getAccount';
-import AccountRepositoryDatabase, { AccountRepositoryMemory } from '../src/infra/repository/AccountRepository';
-import { MailerGatewayMemory } from '../src/infra/gateway/MailerGateway';
-import RequestRide from "../src/application/use_case/RequestRide";
-import RideRepositoryDatabase from "../src/infra/repository/RideRepository";
-import GetRide from "../src/application/use_case/GetRide";
-import DatabaseConnection, { PgPromiseAdapter } from "../src/infra/database/DatabaseConnecction";
+import Signup from '../../src/application/use_case/Signup';
+import GetAccount from '../../src/application/use_case/getAccount';
+import AccountRepositoryDatabase, { AccountRepositoryMemory } from '../../src/infra/repository/AccountRepository';
+import { MailerGatewayMemory } from '../../src/infra/gateway/MailerGateway';
+import RequestRide from "../../src/application/use_case/RequestRide";
+import RideRepositoryDatabase from "../../src/infra/repository/RideRepository";
+import GetRide from "../../src/application/use_case/GetRide";
+import DatabaseConnection, { PgPromiseAdapter } from "../../src/infra/database/DatabaseConnecction";
 
 let signup: Signup;
 let getAccount: GetAccount;
