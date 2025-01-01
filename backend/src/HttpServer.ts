@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors"; 
+import Hapi from "@hapi/hapi";
 
 export default interface HttpServer {
     register(method: string, url: string, callback: Function): void;
@@ -16,7 +17,7 @@ export class ExpressAdapter implements HttpServer {
     };
 
     register(method: string, url: string, callback: Function): void {
-        this.app[method](url, async function(req: Request, res: Response) {
+        this.app[method](url.replace(/\{|\}/g, ''), async function(req: Request, res: Response) {
             try {
                 const output = await callback(req.params, req.body);
                 res.json(output);
@@ -28,5 +29,34 @@ export class ExpressAdapter implements HttpServer {
 
     listen(port: number): void {
         this.app.listen(port);
+    }
+}
+
+export class HapiAdapter implements HttpServer {
+    server: Hapi.Server;
+    constructor(){
+        console.log("Hapi Adapter");
+        this.server = Hapi.server({});
+    }
+
+    register(method: any, url: string, callback: Function): void {
+        this.server.route({
+            method,
+            path: url.replace(/\:/g, ''),
+            handler: async function(request: any, reply: any) {
+                try {
+                    const output = await callback(request.params, request.payload);
+                    return output;
+                } catch (e: any) {
+                    console.log(e);
+                    return reply.response({ message: e.message }).code(422);
+                }
+            }
+        });
+    }
+
+    listen(port: number): void {
+        this.server.settings.port = port;
+        this.server.start();
     }
 }
