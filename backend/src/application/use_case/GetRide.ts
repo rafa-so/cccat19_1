@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { AccountRepository } from "../../infra/repository/AccountRepository";
+import { AccountRepository } from "../repository/AccountRepository";
 import { RideRepository } from "../../infra/repository/RideRepository";
 import Account from "../../domain/Account";
 

@@ -1,4 +1,4 @@
-import { AccountRepository } from "../../infra/repository/AccountRepository";
+import { AccountRepository } from "../repository/AccountRepository";
 
 export default class GetAccount {
 	constructor(readonly serviceData: AccountRepository){}
