@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import { AccountRepository } from "./AccountRepository";
-import { RideRepository } from "./RideRepository";
-import Account from "./Account";
+import { AccountRepository } from "../../infra/repository/AccountRepository";
+import { RideRepository } from "../../infra/repository/RideRepository";
+import Account from "../../domain/Account";
 
 export default class GetRide {
 	constructor(

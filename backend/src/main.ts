@@ -1,10 +1,10 @@
-import Signup from "./Signup";
-import GetAccount from "./getAccount";
-import AccountRepositoryDatabase from "./AccountRepository";
-import { MailerGatewayMemory } from "./MailerGateway";
-import { PgPromiseAdapter } from "./DatabaseConnecction";
-import { ExpressAdapter, HapiAdapter } from "./HttpServer";
-import AccountController from "./AccountController";
+import Signup from "./application/use_case/Signup";
+import GetAccount from "./application/use_case/getAccount";
+import AccountRepositoryDatabase from "./infra/repository/AccountRepository";
+import { MailerGatewayMemory } from "./infra/gateway/MailerGateway";
+import { PgPromiseAdapter } from "./infra/database/DatabaseConnecction";
+import { ExpressAdapter, HapiAdapter } from "./infra/http/HttpServer";
+import AccountController from "./infra/controller/AccountController";
 
 // Entrypoint - Composition Root
 

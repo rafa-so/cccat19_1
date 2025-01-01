@@ -1,5 +1,5 @@
-import Account from "./Account";
-import DatabaseConnection from "./DatabaseConnecction";
+import Account from "../../domain/Account";
+import DatabaseConnection from "../database/DatabaseConnecction";
 
 export interface AccountRepository {
 	saveAccount (account: Account): Promise<any>;

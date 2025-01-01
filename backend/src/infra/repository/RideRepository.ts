@@ -1,5 +1,5 @@
-import Ride from "./Ride";
-import DatabaseConnection from "./DatabaseConnecction";
+import Ride from "../../domain/Ride";
+import DatabaseConnection from "../database/DatabaseConnecction";
 
 export interface RideRepository {
 	saveRide (ride: Ride): Promise<void>;
