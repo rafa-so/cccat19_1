@@ -11,11 +11,11 @@ export default class GetRide {
 
 	async execute(rideId: string): Promise<Output>{
 		const ride = await this.rideRepository.getRideById(rideId);
-		const passengerAccount: Account = await this.accountRepository.getAccountById(ride.passengerId);
+		const passengerAccount: Account = await this.accountRepository.getAccountById(ride.getPassengerId());
 		return { 
-			rideId: ride.rideId,
-			passengerId: ride.passengerId,
-			driverId: ride.driverId,
+			rideId: ride.getRideId(),
+			passengerId: ride.getPassengerId(),
+			driverId: ride.getDriverId(),
 			fromLat: ride.getFrom().getLat(),
 			fromLong: ride.getFrom().getLong(),
 			toLat: ride.getTo().getLat(),
@@ -33,7 +33,7 @@ type Output = {
 	rideId: string,
 	passengerId: string,
 	passengerName: string,
-	driverId: string | null,
+	driverId?: string,
 	fromLat: number,
 	fromLong: number,
 	toLat: number,
