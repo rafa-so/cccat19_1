@@ -30,4 +30,12 @@ export default class Ride {
         const status = "requested";
         return new Ride(rideId, passengerId, null, fromLat, fromLong, toLat, toLong, status, fare, distance, date);
     }
+
+    getFrom() {
+        return this.from;
+    }
+
+    getTo() {
+        return this.to;
+    }
 }
