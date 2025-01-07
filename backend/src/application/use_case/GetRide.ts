@@ -19,11 +19,11 @@ export default class GetRide {
 			fromLong: ride.getFrom().getLong(),
 			toLat: ride.getTo().getLat(),
 			toLong: ride.getTo().getLong(),
-			status: ride.status,
+			status: ride.getStatus(),
 			fare: ride.fare,
 			distance: ride.distance,
 			date: ride.date, 
-			passengerName: passengerAccount.getName() 
+			passengerName: passengerAccount.getName()
 		}
 	}
 }

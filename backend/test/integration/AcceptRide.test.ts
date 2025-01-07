@@ -7,6 +7,7 @@ import RequestRide from "../../src/application/use_case/RequestRide";
 import RideRepositoryDatabase from "../../src/infra/repository/RideRepository";
 import GetRide from "../../src/application/use_case/GetRide";
 import DatabaseConnection, { PgPromiseAdapter } from "../../src/infra/database/DatabaseConnecction";
+import AcceptRide from "../../src/application/use_case/AcceptRide";
 
 let signup: Signup;
 let getAccount: GetAccount;
@@ -45,7 +46,7 @@ test("Deve aceitar uma corrida", async () => {
 
     await acceptRide.execute(inputAcceptRide);
 
-    const outputGetRide = await getRide.execute(outputSignupDriver.accountId);
+    const outputGetRide = await getRide.execute(inputAcceptRide.rideId);
     expect(outputGetRide.status).toBe("accepted");
     expect(outputGetRide.driverId).toBe(inputAcceptRide.driverId);
 });

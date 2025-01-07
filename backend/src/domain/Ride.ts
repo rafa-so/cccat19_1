@@ -16,7 +16,7 @@ export default class Ride {
         fromLong: number,
         toLat: number,
         toLong: number,
-        readonly status: string,
+        private status: string,
         readonly fare: number,
         readonly distance: number,
         readonly date: Date
@@ -35,6 +35,16 @@ export default class Ride {
         const date = new Date();
         const status = "requested";
         return new Ride(rideId.getValue(), passengerId, null, fromLat, fromLong, toLat, toLong, status, fare, distance, date);
+    }
+
+    accept(driverId: string) {
+        this.driverId = new UUID(driverId);
+        if (this.status !== "requested") throw new Error("Invalid status");
+        this.status = "accepted";
+    }
+
+    getStatus() {
+        return this.status;
     }
 
     getFrom() {
