@@ -43,6 +43,11 @@ export default class Ride {
         this.status = "accepted";
     }
 
+    start() {
+        if (this.status !== "accepted") throw new Error("Invalid status");
+        this.status = "in_progress";
+    }
+
     getStatus() {
         return this.status;
     }
