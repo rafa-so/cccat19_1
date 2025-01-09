@@ -1,3 +1,4 @@
+import Position from "./Position";
 import Coord from "./vo/Coord";
 import UUID from "./vo/UUID";
 
@@ -19,7 +20,8 @@ export default class Ride {
         private status: string,
         readonly fare: number,
         readonly distance: number,
-        readonly date: Date
+        readonly date: Date,
+        readonly positions: Position[]
     ) {
         this.rideId = new UUID(rideId);
         this.passengerId = new UUID(passengerId);
@@ -34,7 +36,7 @@ export default class Ride {
         const distance = 0;
         const date = new Date();
         const status = "requested";
-        return new Ride(rideId.getValue(), passengerId, null, fromLat, fromLong, toLat, toLong, status, fare, distance, date);
+        return new Ride(rideId.getValue(), passengerId, null, fromLat, fromLong, toLat, toLong, status, fare, distance, date, []);
     }
 
     accept(driverId: string) {
@@ -46,6 +48,10 @@ export default class Ride {
     start() {
         if (this.status !== "accepted") throw new Error("Invalid status");
         this.status = "in_progress";
+    }
+
+    updatePosition(position: Position) {
+        this.positions.push(position);
     }
 
     getStatus() {
