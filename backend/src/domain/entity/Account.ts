@@ -1,9 +1,9 @@
-import Name from "./vo/Name";
-import Email from "./vo/Email";
-import Cpf from "./vo/Cpf";
-import CarPlate from "./vo/CarPlate";
-import Password from "./vo/Password";
-import UUID from "./vo/UUID";
+import Name from "../vo/Name";
+import Email from "../vo/Email";
+import Cpf from "../vo/Cpf";
+import CarPlate from "../vo/CarPlate";
+import Password from "../vo/Password";
+import UUID from "../vo/UUID";
 
 export default class Account {
     private accountId: UUID;

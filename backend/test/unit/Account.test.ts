@@ -1,4 +1,4 @@
-import Account from "../../src/domain/Account";
+import Account from "../../src/domain/entity/Account";
 
 test('Deve criar uma conta', function() {
     const email = `john.doe.${Math.random()}@gmail.com`;

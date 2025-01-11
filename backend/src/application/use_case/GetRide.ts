@@ -1,6 +1,6 @@
 import { AccountRepository } from "../repository/AccountRepository";
 import { RideRepository } from "../../infra/repository/RideRepository";
-import Account from "../../domain/Account";
+import Account from "../../domain/entity/Account";
 import Coord from "../../domain/vo/Coord";
 
 export default class GetRide {

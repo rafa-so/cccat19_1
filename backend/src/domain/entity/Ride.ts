@@ -1,6 +1,6 @@
 import Position from "./Position";
-import Coord from "./vo/Coord";
-import UUID from "./vo/UUID";
+import Coord from "../vo/Coord";
+import UUID from "../vo/UUID";
 
 export default class Ride {
     private rideId: UUID;
