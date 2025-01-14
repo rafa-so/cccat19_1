@@ -1,7 +1,19 @@
+import Position from "../entity/Position";
 import Coord from "../vo/Coord";
 
 export default class DistanceCalculator {
-    static calculate(from: Coord, to: Coord) {
+	static calculateDiscanteBetweenPositions(positions: Position[]) {
+		let distance = 0;
+		for (const [index, position] of positions.entries()) {
+			const nextPosition = positions[index + 1];
+			if (!nextPosition) break;
+			distance += DistanceCalculator.calculateDiscanteBetweenCoord(position.getCoord(), nextPosition.getCoord());
+		}
+
+		return distance;
+	}
+
+    private static calculateDiscanteBetweenCoord(from: Coord, to: Coord) {
 		const earthRadius = 6371;
 		const degreesToRadians = Math.PI / 180;
 		const deltaLat = (to.getLat() - from.getLat()) * degreesToRadians;

@@ -16,14 +16,7 @@ export default class GetRide {
 		const ride = await this.rideRepository.getRideById(rideId);
 		const passengerAccount: Account = await this.accountRepository.getAccountById(ride.getPassengerId());
 		const positions = await this.positionsRepository.listByRideId(rideId);
-
-		let distance = 0;
-		for (const [index, position] of positions.entries()) {
-			const nextPosition = positions[index + 1];
-			if (!nextPosition) break;
-			distance += DistanceCalculator.calculate(position.getCoord(), nextPosition.getCoord());
-		}
-
+		const distance = DistanceCalculator.calculateDiscanteBetweenPositions(positions);
 		return { 
 			rideId: ride.getRideId(),
 			passengerId: ride.getPassengerId(),
