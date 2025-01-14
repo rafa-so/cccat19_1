@@ -2,7 +2,7 @@ import Position from "../entity/Position";
 import Coord from "../vo/Coord";
 
 export default class DistanceCalculator {
-	static calculateDiscanteBetweenPositions(positions: Position[]) {
+	static calculateDistanceBetweenPositions(positions: Position[]) {
 		let distance = 0;
 		for (const [index, position] of positions.entries()) {
 			const nextPosition = positions[index + 1];
