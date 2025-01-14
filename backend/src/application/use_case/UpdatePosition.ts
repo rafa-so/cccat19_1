@@ -1,14 +1,18 @@
 import Position from "../../domain/entity/Position";
+import PositionRepository from "../../infra/repository/PositionRepository";
 import { RideRepository } from "../../infra/repository/RideRepository";
 
 export default class UpdatePosition {
-	constructor(readonly rideRepository: RideRepository){}
+	constructor(
+		readonly rideRepository: RideRepository, 
+		readonly positionRepository: PositionRepository
+	){}
 
 	async execute(input: Input) {
 		const ride = await this.rideRepository.getRideById(input.rideId);
+		if (ride.getStatus() !== "in_progress") throw new Error("Invalid status");
 		const position = Position.create(ride.getRideId(), input.lat, input.long);
-		ride.updatePosition(position);
-		await this.rideRepository.updateRide(ride);
+		await this.positionRepository.savePosition(position);
 	}
 }
 

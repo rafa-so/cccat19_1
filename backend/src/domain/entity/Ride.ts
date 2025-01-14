@@ -21,8 +21,7 @@ export default class Ride {
         private status: string,
         readonly fare: number,
         readonly distance: number,
-        readonly date: Date,
-        readonly positions: Position[]
+        readonly date: Date
     ) {
         this.rideId = new UUID(rideId);
         this.passengerId = new UUID(passengerId);
@@ -37,7 +36,7 @@ export default class Ride {
         const distance = 0;
         const date = new Date();
         const status = "requested";
-        return new Ride(rideId.getValue(), passengerId, null, fromLat, fromLong, toLat, toLong, status, fare, distance, date, []);
+        return new Ride(rideId.getValue(), passengerId, null, fromLat, fromLong, toLat, toLong, status, fare, distance, date);
     }
 
     accept(driverId: string) {
@@ -51,18 +50,8 @@ export default class Ride {
         this.status = "in_progress";
     }
 
-    updatePosition(position: Position) {
-        this.positions.push(position);
-    }
-
     getDistance() {
-        let distance = 0;
-		for (const [index, position] of this.positions.entries()) {
-			const nextPosition = this.positions[index + 1];
-			if (!nextPosition) break;
-			distance += DistanceCalculator.calculate(position.getCoord(), nextPosition.getCoord());
-		}
-        return distance
+        return this.distance;
     }
 
     getStatus() {

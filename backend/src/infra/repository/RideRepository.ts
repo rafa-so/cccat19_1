@@ -16,23 +16,10 @@ export default class RideRepositoryDatabase implements RideRepository {
 		await this.connection.query("UPDATE ccca.ride SET status = $1, driver_id = $2 WHERE ride_id = $3",
 			[ride.getStatus(), ride.getDriverId(), ride.getRideId()]
 		);
-		await this.connection.query("DELETE FROM ccca.position WHERE ride_id = $1", [ride.getRideId()]);
-		for(const position of ride.positions) {
-			await this.connection.query("INSERT INTO ccca.position (position_id, ride_id, lat, long, date) VALUES ($1, $2, $3, $4, $5)",[
-				position.getPositionId(), ride.getRideId(), position.getCoord().getLat(), position.getCoord().getLong(), position.date
-			]);
-		}
 	}
 
 	async getRideById( rideId: string ) {
 		const [rideData] = await this.connection.query("SELECT * FROM ccca.ride WHERE ride_id = $1", [rideId]);
-		const positions: Position[] = [];
-
-		const positionsData = await this.connection.query("SELECT * FROM ccca.position WHERE ride_id = $1", [rideId]);
-		for (const positionData of positionsData) {
-			positions.push(new Position(positionData.position_id, positionData.rideId, parseFloat(positionData.lat), parseFloat(positionData.long), positionData.data));
-		}
-
 		return new Ride(
 			rideData.ride_id, 
 			rideData.passenger_id, 
@@ -44,8 +31,7 @@ export default class RideRepositoryDatabase implements RideRepository {
 			rideData.status, 
 			parseFloat(rideData.fare), 
 			parseFloat(rideData.distance), 
-			rideData.date,
-			positions
+			rideData.date
 		);
 	}
 	

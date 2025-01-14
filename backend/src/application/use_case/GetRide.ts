@@ -2,16 +2,27 @@ import { AccountRepository } from "../repository/AccountRepository";
 import { RideRepository } from "../../infra/repository/RideRepository";
 import Account from "../../domain/entity/Account";
 import Coord from "../../domain/vo/Coord";
+import PositionRepository from "../../infra/repository/PositionRepository";
+import DistanceCalculator from "../../domain/service/DistanceCalculator";
 
 export default class GetRide {
 	constructor(
 		readonly accountRepository: AccountRepository,
-		readonly rideRepository: RideRepository
+		readonly rideRepository: RideRepository,
+		readonly positionsRepository: PositionRepository
 	){}
 
 	async execute(rideId: string): Promise<Output>{
 		const ride = await this.rideRepository.getRideById(rideId);
 		const passengerAccount: Account = await this.accountRepository.getAccountById(ride.getPassengerId());
+		const positions = await this.positionsRepository.listByRideId(rideId);
+
+		let distance = 0;
+		for (const [index, position] of positions.entries()) {
+			const nextPosition = positions[index + 1];
+			if (!nextPosition) break;
+			distance += DistanceCalculator.calculate(position.getCoord(), nextPosition.getCoord());
+		}
 
 		return { 
 			rideId: ride.getRideId(),
@@ -23,7 +34,7 @@ export default class GetRide {
 			toLong: ride.getTo().getLong(),
 			status: ride.getStatus(),
 			fare: ride.fare,
-			distance: ride.getDistance(),
+			distance,
 			date: ride.date, 
 			passengerName: passengerAccount.getName()
 		}
