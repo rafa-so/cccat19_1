@@ -1,6 +1,6 @@
 import { AccountRepository } from "../repository/AccountRepository";
 import { RideRepository } from "../../infra/repository/RideRepository";
-import Ride from "../../domain/Ride";
+import Ride from "../../domain/entity/Ride";
 
 export default class RequestRide {
 	constructor(
@@ -15,7 +15,7 @@ export default class RequestRide {
 		const ride = Ride.create(input.passengerId, input.fromLat, input.fromLong, input.toLat, input.toLong);
 		if (hasActiviteRide) throw new Error("Passenger already have an active ride"); 
 		await this.rideRepository.saveRide(ride);
-		return { rideId: ride.rideId };
+		return { rideId: ride.getRideId()};
 	}
 }
 

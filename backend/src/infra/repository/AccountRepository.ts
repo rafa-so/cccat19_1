@@ -1,5 +1,5 @@
 import { AccountRepository } from "../../application/repository/AccountRepository";
-import Account from "../../domain/Account";
+import Account from "../../domain/entity/Account";
 import DatabaseConnection from "../database/DatabaseConnecction";
 
 export default class AccountRepositoryDatabase implements AccountRepository {
