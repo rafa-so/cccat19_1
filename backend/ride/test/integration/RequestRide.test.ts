@@ -1,31 +1,24 @@
 import sinon from "sinon";
-import Signup from '../../src/application/use_case/Signup';
-import GetAccount from '../../src/application/use_case/getAccount';
-import AccountRepositoryDatabase, { AccountRepositoryMemory } from '../../src/infra/repository/AccountRepository';
-import { MailerGatewayMemory } from '../../src/infra/gateway/MailerGateway';
 import RequestRide from "../../src/application/use_case/RequestRide";
 import RideRepositoryDatabase from "../../src/infra/repository/RideRepository";
 import GetRide from "../../src/application/use_case/GetRide";
 import DatabaseConnection, { PgPromiseAdapter } from "../../src/infra/database/DatabaseConnecction";
 import { PositionRepositoryDatabase } from "../../src/infra/repository/PositionRepository";
+import AccountGateway, { AccountGatewayHttp } from "../../src/infra/gateway/AccountGateway";
 
-let signup: Signup;
-let getAccount: GetAccount;
 let requestRide: RequestRide;
 let getRide: GetRide;
 let connection: DatabaseConnection;
+let accountGateway: AccountGateway;
 
 beforeEach(() => {
+    accountGateway = new AccountGatewayHttp();
     connection = new PgPromiseAdapter();
-    const accountRepository = new AccountRepositoryDatabase(connection);
     const rideRepository = new RideRepositoryDatabase(connection);
     const positionsRepository = new PositionRepositoryDatabase(connection);
     // const accountRepository = new AccountRepositoryMemory();
-    const mailerGateway = new MailerGatewayMemory();
-    signup = new Signup(accountRepository, mailerGateway);
-    getAccount = new GetAccount(accountRepository);
-    requestRide = new RequestRide(accountRepository, rideRepository);
-    getRide = new GetRide(accountRepository, rideRepository, positionsRepository);
+    requestRide = new RequestRide(accountGateway, rideRepository);
+    getRide = new GetRide(accountGateway, rideRepository, positionsRepository);
 });
 
 afterEach(async () => {
@@ -41,7 +34,7 @@ test("Deve solicitar uma corrida", async () => {
         isPassenger: true
     }
 
-    const outputSignup = await signup.execute(inputSignup);
+    const outputSignup = await accountGateway.signup(inputSignup);
     const inputRequestRide = {
         passengerId: outputSignup.accountId,
         fromLat: -27.584905257808835,
@@ -75,7 +68,7 @@ test("Não deve solicitar uma corrida se a conta não for de um passageiro", asy
         isDriver: true
     }
 
-    const outputSignup = await signup.execute(inputSignup);
+    const outputSignup = await accountGateway.signup(inputSignup);
     const inputRequestRide = {
         passengerId: outputSignup.accountId,
         fromLat: -27.584905257808835,
@@ -95,7 +88,7 @@ test("Não pode solicitar uma corrida se já tiver outra ativa", async () => {
         isPassenger: true
     };
 
-    const outputSignup = await signup.execute(inputSignup);
+    const outputSignup = await accountGateway.signup(inputSignup);
     const inputRequestRide = {
         passengerId: outputSignup.accountId,
         fromLat: -27.584905257808835,
