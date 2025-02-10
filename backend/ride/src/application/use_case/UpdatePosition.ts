@@ -11,7 +11,7 @@ export default class UpdatePosition {
 	async execute(input: Input) {
 		const ride = await this.rideRepository.getRideById(input.rideId);
 		if (ride.getStatus() !== "in_progress") throw new Error("Invalid status");
-		const position = Position.create(ride.getRideId(), input.lat, input.long);
+		const position = Position.create(ride.getRideId(), input.lat, input.long, input.date);
 		await this.positionRepository.savePosition(position);
 	}
 }
@@ -19,5 +19,6 @@ export default class UpdatePosition {
 type Input = { 
 	rideId: string,
 	lat: number,
-	long: number
+	long: number,
+	date?: Date
 } 

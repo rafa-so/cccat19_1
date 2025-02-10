@@ -13,8 +13,8 @@ export interface RideRepository {
 export default class RideRepositoryDatabase implements RideRepository {
 	constructor(readonly connection: DatabaseConnection){}
 	async updateRide(ride: Ride): Promise<void> {
-		await this.connection.query("UPDATE ccca.ride SET status = $1, driver_id = $2 WHERE ride_id = $3",
-			[ride.getStatus(), ride.getDriverId(), ride.getRideId()]
+		await this.connection.query("UPDATE ccca.ride SET status = $1, driver_id = $2, distance = $3, fare = $4 WHERE ride_id = $5",
+			[ride.getStatus(), ride.getDriverId(), ride.getDistance(), ride.getFare(), ride.getRideId()]
 		);
 	}
 
@@ -37,7 +37,7 @@ export default class RideRepositoryDatabase implements RideRepository {
 	
 	async saveRide(ride: Ride) {
 		await this.connection.query("INSERT INTO ccca.ride (ride_id, passenger_id, driver_id, from_lat, from_long, to_lat, to_long, fare, distance, status, date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
-			[ride.getRideId(), ride.getPassengerId(), ride.getDriverId(), ride.getFrom().getLat(), ride.getFrom().getLong(), ride.getTo().getLat(), ride.getTo().getLong(), ride.fare, ride.distance, ride.getStatus(), ride.date]
+			[ride.getRideId(), ride.getPassengerId(), ride.getDriverId(), ride.getFrom().getLat(), ride.getFrom().getLong(), ride.getTo().getLat(), ride.getTo().getLong(), ride.getFare(), ride.getDistance(), ride.getStatus(), ride.date]
 		);
 	}
 

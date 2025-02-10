@@ -1,7 +1,7 @@
-import Position from "./Position";
+import DistanceCalculator from "../service/DistanceCalculator";
 import Coord from "../vo/Coord";
 import UUID from "../vo/UUID";
-import DistanceCalculator from "../service/DistanceCalculator";
+import Position from "./Position";
 
 export default class Ride {
     private rideId: UUID;
@@ -19,8 +19,8 @@ export default class Ride {
         toLat: number,
         toLong: number,
         private status: string,
-        readonly fare: number,
-        readonly distance: number,
+        private fare: number,
+        private distance: number,
         readonly date: Date
     ) {
         this.rideId = new UUID(rideId);
@@ -50,8 +50,32 @@ export default class Ride {
         this.status = "in_progress";
     }
 
+    finish(positions: Position[]) {
+        if (this.status !== "in_progress") throw new Error("Invalid status");
+        this.status = 'completed';
+        for(const [index, position] of positions.entries()) {
+            const nextPosition = positions[index + 1];
+            if (!nextPosition) break;
+            const distance = DistanceCalculator.calculateDistanceBetweenPositions([position, nextPosition]);
+
+            console.log({ position });
+
+            if (position.date.getHours() > 22 || position.date.getHours() < 6 ) {
+                this.fare += distance * 3.9;
+            } else {
+                this.fare += distance * 2.1;
+            }
+            this.distance += distance;
+        }
+        this.fare = this.distance * 2.1;
+    }
+
     getDistance() {
         return this.distance;
+    }
+
+    getFare() {
+        return this.fare;
     }
 
     getStatus() {
