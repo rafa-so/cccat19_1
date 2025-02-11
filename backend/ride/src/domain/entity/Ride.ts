@@ -57,10 +57,14 @@ export default class Ride {
             const nextPosition = positions[index + 1];
             if (!nextPosition) break;
             const distance = DistanceCalculator.calculateDistanceBetweenPositions([position, nextPosition]);
-            if (position.date.getHours() > 22 || position.date.getHours() < 6 ) {
-                this.fare += distance * 3.9;
+            if (position.date.getDay() === 0) {
+                this.fare += distance * 5;
             } else {
-                this.fare += distance * 2.1;
+                if (position.date.getHours() > 22 || position.date.getHours() < 6 ) {
+                    this.fare += distance * 3.9;
+                } else {
+                    this.fare += distance * 2.1;
+                }
             }
             this.distance += distance;
         }
