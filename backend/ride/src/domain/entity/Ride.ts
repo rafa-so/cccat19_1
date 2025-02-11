@@ -63,7 +63,6 @@ export default class Ride {
                 this.fare += distance * 2.1;
             }
             this.distance += distance;
-            console.log("\n --- debug calc distance fare positions --- \n", { dis: this.distance, fare: this.fare })
         }
     }
 
