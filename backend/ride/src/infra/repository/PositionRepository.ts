@@ -20,7 +20,7 @@ export class PositionRepositoryDatabase implements PositionRepository {
         const positions: Position[] = [];
         const positionsData = await this.connection.query("SELECT * FROM ccca.position WHERE ride_id = $1", [rideId]);
 		for (const positionData of positionsData) {
-			positions.push(new Position(positionData.position_id, positionData.rideId, parseFloat(positionData.lat), parseFloat(positionData.long), positionData.data));
+			positions.push(new Position(positionData.position_id, positionData.rideId, parseFloat(positionData.lat), parseFloat(positionData.long), positionData.date));
 		}
         return positions;
     }

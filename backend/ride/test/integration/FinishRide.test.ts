@@ -64,12 +64,6 @@ test("Deve finalizar uma corrida em horário comercial", async () => {
 
     const inputFinished = { rideId: outputRequestRide.rideId }
 
-    console.log({
-        inputUpdatePosition1,
-        inputUpdatePosition2,
-        inputFinished
-    })
-
     await finishRide.execute(inputFinished);
     const outputGetRide = await getRide.execute(inputAcceptRide.rideId);
     expect(outputGetRide.status).toBe("completed");
