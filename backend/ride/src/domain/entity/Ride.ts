@@ -1,4 +1,5 @@
 import DistanceCalculator from "../service/DistanceCalculator";
+import { FareCalculatorFactory } from "../service/FareCalculator";
 import Coord from "../vo/Coord";
 import UUID from "../vo/UUID";
 import Position from "./Position";
@@ -57,15 +58,7 @@ export default class Ride {
             const nextPosition = positions[index + 1];
             if (!nextPosition) break;
             const distance = DistanceCalculator.calculateDistanceBetweenPositions([position, nextPosition]);
-            if (position.date.getDay() === 0) {
-                this.fare += distance * 5;
-            } else {
-                if (position.date.getHours() > 22 || position.date.getHours() < 6 ) {
-                    this.fare += distance * 3.9;
-                } else {
-                    this.fare += distance * 2.1;
-                }
-            }
+            this.fare += FareCalculatorFactory.create(position.date).calculate(distance);
             this.distance += distance;
         }
     }
