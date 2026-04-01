@@ -1,5 +1,8 @@
 import axios from "axios"
-import { isExportDeclaration } from "typescript";
+
+axios.defaults.validateStatus = function() {
+    return true;
+}
 
 test("Deve criar uma conta de passageiro", async function() {
     // Given
@@ -23,4 +26,106 @@ test("Deve criar uma conta de passageiro", async function() {
     expect(outputGetAccount.email).toBe(input.email);
     expect(outputGetAccount.cpf).toBe(input.cpf);
     expect(outputGetAccount.is_passenger).toBe(input.isPassenger);
+});
+
+test("Deve criar uma conta de motorista", async function() {
+    const input = {
+        name: "John Doe",
+        email: `john.doe${Math.random()}@gmail.com`,
+        cpf: "97456321558",
+        password: "123456",
+        isPassenger: false,
+        isDriver: true,
+        carPlate: "ABC1234"
+    }
+
+    const responseSignup = await axios.post("http://localhost:3000/signup", input);
+    const outputSignup = responseSignup.data;
+    const responseGetAccount = await axios.get(`http://localhost:3000/account/${outputSignup.accountId}`);
+    const outputGetAccount = responseGetAccount.data;
+
+    expect(outputSignup.accountId).toBeDefined();
+    expect(outputGetAccount.name).toBe(input.name);
+    expect(outputGetAccount.email).toBe(input.email);
+    expect(outputGetAccount.cpf).toBe(input.cpf);
+    expect(outputGetAccount.is_passenger).toBe(input.isPassenger);
+    expect(outputGetAccount.is_driver).toBe(input.isDriver);
+    expect(outputGetAccount.car_plate).toBe(input.carPlate);
+});
+
+test("Não deve criar uma conta de passageiro com o nome inválido", async function() {
+    // Given
+    const input = {
+        name: "John",
+        email: `john.doe${Math.random()}@gmail.com`,
+        cpf: "97456321558",
+        password: "123456",
+        isPassenger: true,
+    }
+
+    const responseSignup = await axios.post("http://localhost:3000/signup", input);
+    const outputSignup = responseSignup.data;
+    expect(outputSignup.message).toBe(-3);
+});
+
+test("Não deve criar uma conta de passageiro com o email inválido", async function() {
+    // Given
+    const input = {
+        name: "John Doe",
+        email: `john.doe${Math.random()}`,
+        cpf: "97456321558",
+        password: "123456",
+        isPassenger: true,
+    }
+
+    const responseSignup = await axios.post("http://localhost:3000/signup", input);
+    const outputSignup = responseSignup.data;
+    expect(outputSignup.message).toBe(-2);
+});
+
+test("Não deve criar uma conta de passageiro com o cpf inválido", async function() {
+    // Given
+    const input = {
+        name: "John Doe",
+        email: `john.doe${Math.random()}@gmail.com`,
+        cpf: "97456321",
+        password: "123456",
+        isPassenger: true,
+    }
+
+    const responseSignup = await axios.post("http://localhost:3000/signup", input);
+    const outputSignup = responseSignup.data;
+    expect(outputSignup.message).toBe(-1);
+});
+
+test("Deve criar uma conta de motorista", async function() {
+    const input = {
+        name: "John Doe",
+        email: `john.doe${Math.random()}@gmail.com`,
+        cpf: "97456321558",
+        password: "123456",
+        isPassenger: false,
+        isDriver: true,
+        carPlate: "ABC12"
+    }
+
+    const responseSignup = await axios.post("http://localhost:3000/signup", input);
+    const outputSignup = responseSignup.data;
+    expect(outputSignup.message).toBe(-5);
+});
+
+test("Não deve criar uma conta de passageiro com conta duplicada", async function() {
+    // Given
+    const input = {
+        name: "John Doe",
+        email: `john.doe${Math.random()}@gmail.com`,
+        cpf: "97456321558",
+        password: "123456",
+        isPassenger: true,
+    }
+
+    await axios.post("http://localhost:3000/signup", input);
+    const responseSignup = await axios.post("http://localhost:3000/signup", input);
+    const outputSignup = responseSignup.data;
+    expect(outputSignup.message).toBe(-4);
 });
