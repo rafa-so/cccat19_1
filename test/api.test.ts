@@ -65,7 +65,7 @@ test("Não deve criar uma conta de passageiro com o nome inválido", async funct
 
     const responseSignup = await axios.post("http://localhost:3000/signup", input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-3);
+    expect(outputSignup.message).toBe("Invalid name");
 });
 
 test("Não deve criar uma conta de passageiro com o email inválido", async function() {
@@ -80,7 +80,7 @@ test("Não deve criar uma conta de passageiro com o email inválido", async func
 
     const responseSignup = await axios.post("http://localhost:3000/signup", input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-2);
+    expect(outputSignup.message).toBe("Invalid email");
 });
 
 test("Não deve criar uma conta de passageiro com o cpf inválido", async function() {
@@ -95,7 +95,7 @@ test("Não deve criar uma conta de passageiro com o cpf inválido", async functi
 
     const responseSignup = await axios.post("http://localhost:3000/signup", input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-1);
+    expect(outputSignup.message).toBe("Invalid cpf");
 });
 
 test("Deve criar uma conta de motorista", async function() {
@@ -111,7 +111,7 @@ test("Deve criar uma conta de motorista", async function() {
 
     const responseSignup = await axios.post("http://localhost:3000/signup", input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-5);
+    expect(outputSignup.message).toBe("Invalid car plate");
 });
 
 test("Não deve criar uma conta de passageiro com conta duplicada", async function() {
@@ -127,5 +127,5 @@ test("Não deve criar uma conta de passageiro com conta duplicada", async functi
     await axios.post("http://localhost:3000/signup", input);
     const responseSignup = await axios.post("http://localhost:3000/signup", input);
     const outputSignup = responseSignup.data;
-    expect(outputSignup.message).toBe(-4);
+    expect(outputSignup.message).toBe("Duplicated account");
 });
