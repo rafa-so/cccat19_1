@@ -2,9 +2,11 @@ import crypto from "crypto";
 import pgp from "pg-promise";
 import express from "express";
 import { validateCpf } from "./validateCpf";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 function isValidName(name: string) {
 	return name.match(/[a-zA-Z] [a-zA-Z]+/);
@@ -19,6 +21,7 @@ function isValidCarPlate(carPlate: string) {
 }
 
 app.post("/signup", async function (req, res) {
+	console.log('signup request', req.body);
 	const input = req.body;
 	const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
 	try {
