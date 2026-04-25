@@ -21,7 +21,6 @@ function isValidCarPlate(carPlate: string) {
 }
 
 app.post("/signup", async function (req, res) {
-	console.log('signup request', req.body);
 	const input = req.body;
 	const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
 	try {

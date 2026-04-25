@@ -3,6 +3,8 @@
 import { ref } from 'vue';
 
   const accountId = ref("");
+  const status = ref("");
+  const message = ref("");
 
   const form = ref({
     name: "",
@@ -21,7 +23,6 @@ import { ref } from 'vue';
   }
 
   async function signup() {
-      console.log("signup function")
       const response = await fetch("http://localhost:3000/signup", {
         method: "POST",
         headers: {
@@ -31,35 +32,43 @@ import { ref } from 'vue';
       });
 
       const output = await response.json();
-      accountId.value = output.accountId;
-
+      if (output.accountId) {
+        accountId.value = output.accountId;
+        status.value = "success";
+        message.value = output.message;
+      } else {
+        status.value = "Error";
+        message.value = output.message;
+      }
     }
 
 </script>
 
 <template>
   <div>
-    <input type="text" placeholder="Name" v-model="form.name"/>
+    <input type="text" class="input-name" placeholder="Name" v-model="form.name"/>
   </div>
   <div>
-    <input type="text" placeholder="Email" v-model="form.email"/>
+    <input type="text" class="input-email" placeholder="Email" v-model="form.email"/>
   </div>
   <div>
-    <input type="text" placeholder="Cpf" v-model="form.cpf"/>
+    <input type="text" class="input-cpf" placeholder="Cpf" v-model="form.cpf"/>
   </div>
   <div>
-    <input type="text" placeholder="Password" v-model="form.password"/>
+    <input type="text" class="input-password" placeholder="Password" v-model="form.password"/>
   </div>
   <div>
-    <input type="checkbox" v-model="form.isPassenger" /> Passenger
+    <input type="checkbox" class="input-is-passenger" v-model="form.isPassenger" /> Passenger
   </div>
   <br />
   {{ form }}
   <br />
-  {{ accountId }}
+  <span class="span-status">{{ status }}</span>
+  <br />
+  <span class="span-message">{{ message }}</span>
   <br />
   <div>
-    <button @click="signup()">Signup</button>
+    <button class="button-signup" @click="signup()">Signup</button>
     <button @click="fill()">Fill</button>
   </div>
 </template>
