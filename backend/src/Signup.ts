@@ -1,9 +1,13 @@
 import crypto from "crypto";
 import { validateCpf } from "./validateCpf";
 import { AccountDAO } from "./data";
+import MailerGateway from "./MailerGateway";
  
 export default class Signup {
-    constructor(readonly accountDAO: AccountDAO) {
+    constructor(
+        readonly accountDAO: AccountDAO,
+        readonly mailerGateway: MailerGateway
+    ) {
     }
 
     isValidName(name: string) {
@@ -35,7 +39,8 @@ export default class Signup {
         if (!this.isValidEmail(input.email)) throw new Error("Invalid email");
         if (!validateCpf(input.cpf)) throw new Error("Invalid cpf");
         if (input.isDriver && !this.isValidCarPlate(input.carPlate)) throw new Error("Invalid car plate");
-        await this.accountDAO.saveAccount(account)
+        await this.accountDAO.saveAccount(account);
+        await this.mailerGateway.send(account.email, "Welcome!", "...");
         return { accountId: account.accountId };
     }
 }
