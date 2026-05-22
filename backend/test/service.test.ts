@@ -79,7 +79,7 @@ test("Deve criar uma conta de passageiro com stub", async function() {
     accountDAOStub3.restore();
 });
 
-test.only("Deve criar uma conta de passageiro com spy", async function() {
+test("Deve criar uma conta de passageiro com spy", async function() {
     /**
      * A lógica do spy é diferenente do stub. Ele fica espionando o método definido,
      * e depois da execução podemos executar uma série de testes em cima da observação
@@ -116,7 +116,7 @@ test.only("Deve criar uma conta de passageiro com spy", async function() {
     mailerSpy.restore();
 });
 
-test.only("Deve criar uma conta de passageiro com mock", async function() {
+test("Deve criar uma conta de passageiro com mock", async function() {
     /**
      * O mock é uma combinação de stub e spy. Ele permite definir o comportamento de um método,
      * assim como verificar se ele foi chamado, quantas vezes foi chamado e com quais parâmetros.
