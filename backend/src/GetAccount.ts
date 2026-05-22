@@ -1,14 +1,11 @@
+import { AccountDAO } from "./data";
+
  export default class GetAccount {
-    constructor(readonly getAccountData: GetAccountData) {
+    constructor(readonly accountDAO: AccountDAO) {
     }
 
     async getAccount(accountId: string) {
-        const accountData = await this.getAccountData.getAccountById(accountId);
+        const accountData = await this.accountDAO.getAccountById(accountId);
         return accountData;
     }
 }
-
-export interface GetAccountData {
-    getAccountById(accountId: string): Promise<any>;
-}
-

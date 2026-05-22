@@ -1,8 +1,9 @@
 import crypto from "crypto";
 import { validateCpf } from "./validateCpf";
+import { AccountDAO } from "./data";
  
 export default class Signup {
-    constructor(readonly signupData: SignupData) {
+    constructor(readonly accountDAO: AccountDAO) {
     }
 
     isValidName(name: string) {
@@ -28,18 +29,13 @@ export default class Signup {
             password: input.password,
             carPlate: input.carPlate
         }
-        const existingAccount = await this.signupData.getAccountByEmail(input.email);
+        const existingAccount = await this.accountDAO.getAccountByEmail(input.email);
         if (existingAccount) throw new Error("Duplicated account");
         if (!this.isValidName(input.name)) throw new Error("Invalid name");
         if (!this.isValidEmail(input.email)) throw new Error("Invalid email");
         if (!validateCpf(input.cpf)) throw new Error("Invalid cpf");
         if (input.isDriver && !this.isValidCarPlate(input.carPlate)) throw new Error("Invalid car plate");
-        await this.signupData.saveAccount(account)
+        await this.accountDAO.saveAccount(account)
         return { accountId: account.accountId };
     }
-}
-
-export interface SignupData {
-    getAccountByEmail(email: string): Promise<any>;
-    saveAccount(account: any): Promise<any>;   
 }
