@@ -1,4 +1,5 @@
 import axios from "axios"
+import { test, expect } from "@jest/globals"
 
 axios.defaults.validateStatus = function() {
     return true;
@@ -25,7 +26,7 @@ test("Deve criar uma conta de passageiro", async function() {
     expect(outputGetAccount.name).toBe(input.name);
     expect(outputGetAccount.email).toBe(input.email);
     expect(outputGetAccount.cpf).toBe(input.cpf);
-    expect(outputGetAccount.is_passenger).toBe(input.isPassenger);
+    expect(outputGetAccount.isPassenger).toBe(input.isPassenger);
 });
 
 test("Deve criar uma conta de motorista", async function() {
@@ -48,9 +49,9 @@ test("Deve criar uma conta de motorista", async function() {
     expect(outputGetAccount.name).toBe(input.name);
     expect(outputGetAccount.email).toBe(input.email);
     expect(outputGetAccount.cpf).toBe(input.cpf);
-    expect(outputGetAccount.is_passenger).toBe(input.isPassenger);
-    expect(outputGetAccount.is_driver).toBe(input.isDriver);
-    expect(outputGetAccount.car_plate).toBe(input.carPlate);
+    expect(outputGetAccount.isPassenger).toBe(input.isPassenger);
+    expect(outputGetAccount.isDriver).toBe(input.isDriver);
+    expect(outputGetAccount.carPlate).toBe(input.carPlate);
 });
 
 test("Não deve criar uma conta de passageiro com o nome inválido", async function() {
