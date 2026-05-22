@@ -1,8 +1,10 @@
 import crypto from "crypto";
 import { validateCpf } from "./validateCpf";
-import Data from "./data";
+ 
+export default class Signup {
+    constructor(readonly signupData: SignupData) {
+    }
 
-export default class Service {
     isValidName(name: string) {
         return name.match(/[a-zA-Z] [a-zA-Z]+/);
     }
@@ -26,19 +28,18 @@ export default class Service {
             password: input.password,
             carPlate: input.carPlate
         }
-        const data = new Data();
-        const existingAccount = await data.getAccountByEmail(input.email);
+        const existingAccount = await this.signupData.getAccountByEmail(input.email);
         if (existingAccount) throw new Error("Duplicated account");
         if (!this.isValidName(input.name)) throw new Error("Invalid name");
         if (!this.isValidEmail(input.email)) throw new Error("Invalid email");
         if (!validateCpf(input.cpf)) throw new Error("Invalid cpf");
         if (input.isDriver && !this.isValidCarPlate(input.carPlate)) throw new Error("Invalid car plate");
-        await data.saveAccount(account)
+        await this.signupData.saveAccount(account)
         return { accountId: account.accountId };
     }
-    async getAccount(accountId: string) {
-        const data = new Data();
-        const accountData = await data.getAccountById(accountId);
-        return accountData;
-    }
+}
+
+export interface SignupData {
+    getAccountByEmail(email: string): Promise<any>;
+    saveAccount(account: any): Promise<any>;   
 }
