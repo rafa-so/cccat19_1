@@ -1,5 +1,6 @@
 import { validateCpf } from "../src/validateCpf";
 
+
 test.each([
 	"97456321558",
 	"974.563.215-58",
