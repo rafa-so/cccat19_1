@@ -4,7 +4,7 @@ import { AccountDAO } from "./data";
     constructor(readonly accountDAO: AccountDAO) {
     }
 
-    async getAccount(accountId: string) {
+    async execute(accountId: string) {
         const accountData = await this.accountDAO.getAccountById(accountId);
         return accountData;
     }

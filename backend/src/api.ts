@@ -15,7 +15,7 @@ app.post("/signup", async function (req, res) {
         const accountDAO = new AccountDAODatabase();
         const mailerGateway = new MailerGatewayMemory();
         const service = new Signup(accountDAO, mailerGateway);
-        const output = await service.signup(input);
+        const output = await service.execute(input);
         res.json(output);
     } catch (e: any) {
         res.status(422).json({ message: e.message });
@@ -26,7 +26,7 @@ app.get("/account/:accountId", async function (req, res) {
     const accountId = req.params.accountId;
     const accountDAO = new AccountDAODatabase();
     const service = new GetAccount(accountDAO);
-    const output = await service.getAccount(accountId);
+    const output = await service.execute(accountId);
     res.json(output);
 });
 
