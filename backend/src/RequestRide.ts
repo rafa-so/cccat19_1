@@ -6,6 +6,10 @@ export default class Signup {
     constructor(readonly accountDAO: AccountDAO, readonly rideDAO: RideDAO) {}
 
     async execute(input: Input) {
+        const accountData = await this.accountDAO.getAccountById(input.passengerId)
+        if (!accountData.isPassenger) throw new Error("Account must be from a passenger");
+        const hasActiveRide = await this.rideDAO.hasActiveRideByPassengerId(input.passengerId);
+        if (hasActiveRide) throw new Error("Passenger already have an active ride");
         const ride = { 
             rideId: crypto.randomUUID(),
             passengerId: input.passengerId,
