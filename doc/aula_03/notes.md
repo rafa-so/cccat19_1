@@ -35,3 +35,24 @@ Uma coisa não tem exatamente relação com a outra. Dependedo do problema que e
 
 O `use case` é mais uma especialidade de cada umas das operações envolvendo CRUD. Podemos ter uma série de regras para executar uma atualização de dados de um produto. Podemos ter algumas formas de atualização de pequenos dados de um mesmo produto. Assim como os outros `use cases`. 
 
+## Entity
+Entidades são responsáveis por abstrair as `Regras de Negócio Independentes`, que <u>podem ser desde um objeto com métodos até mesmo um conjunto de funções</u>.
+
+![alt text](image-1.png)
+
+Na imagem temos o acesso da API ao `Use Case`, que neste caso, é o `Request Ride`. Este, ele pode, e vai, ser capaz de orquestrar e interagir com várias entidades, como: `Account` e `Ride`. E é possível também termos várias outras entidades menores que são usadas por essas entidades maiores.
+
+Account
+ - Name
+ - Email
+ - Cpf
+ - Car Plate
+
+Ride
+ - Coordenates
+ - Status
+
+Este é um exemplo de esquema onde temos algumas entidades maiores (`Account` e `Ride`) interagindo e orquestrando outras entidades menores.
+
+> IMPORTANTE: Entidade no contexto de `DDD` tem um significado específico, sendo tratado mais como abstração de lógicas que podem ser usadas em vários casos de uso. Já no `ORM` é mais relacionado ao mapeamendo entre as tabelas de banco de dados e os dados de aplicação.
+
