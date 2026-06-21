@@ -56,3 +56,8 @@ Este é um exemplo de esquema onde temos algumas entidades maiores (`Account` e 
 
 > IMPORTANTE: Entidade no contexto de `DDD` tem um significado específico, sendo tratado mais como abstração de lógicas que podem ser usadas em vários casos de uso. Já no `ORM` é mais relacionado ao mapeamendo entre as tabelas de banco de dados e os dados de aplicação.
 
+### Objeto anêmico
+O `objeto anêmico` é um antipadrão onde as entidades não possuem comportamento, elas apenas possuiem dados, ou chamadas explícitas para outras regras, sem o encapsulamento de regras de negócio.
+
+#### Encapsulamento
+consiste na proteção, ou "esconder" certos comportamentos, para que outros recursos estejam disponíveis.
