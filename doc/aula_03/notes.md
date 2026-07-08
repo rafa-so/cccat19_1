@@ -67,3 +67,4 @@ DAO (Data Access Object) é um padrão de projeto que tem como objetivo abstrati
 
 A ideia do repository é trabalhar com entidade, e não com dados, como o DAO. O repository é mais relacionado a regras de negócio, enquanto o DAO é mais relacionado a persistência de dados.
 
+### Interface Adapter
