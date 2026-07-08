@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { AccountDAO } from "./data";
+import { AccountDAO } from "./AccountRepository";
 import { RideDAO } from "./RideDAO.ts";
  
 export default class Signup {

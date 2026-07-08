@@ -1,5 +1,5 @@
 import { beforeEach, test, expect } from "@jest/globals";
-import AccountDAODatabase from "../src/data";
+import AccountDAODatabase from "../src/AccountRepository";
 import Signup from "../src/Signup";
 import { MailerGatewayMemory } from "../src/MailerGateway";
 import RideDAODatabase from "../src/RideDAO.ts";

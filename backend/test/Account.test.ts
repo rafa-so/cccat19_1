@@ -1,0 +1,23 @@
+import Account from "../src/Account";
+
+test("Deve criar uma conta de passageiro", function (){
+    const account = Account.create("John Doe", "johndoe@gmail.com", "97456321558", "", "123456", true, false);
+    expect(account.name).toBe("John Doe");
+    expect(account.email).toBe("johndoe@gmail.com");
+}); 
+
+test("Não deve criar uma conta com nome inválido", function (){
+    expect(() => Account.create("John", "johndoe@gmail.com", "97456321558", "", "123456", true, false)).toThrow(new Error("Invalid name")); 
+});
+
+test("Não deve criar conta com email inválido", function() {
+    expect(() => Account.create("John Doe", "johndoe", "97456321558", "", "123456", true, false)).toThrow(new Error("Invalid email")); 
+});
+
+test("Não deve criar uma conta com cpf inválido", function(){
+    expect(() => Account.create("John Doe", "johndoe@gmail.com", "974563215", "", "123456", true, false)).toThrow(new Error("Invalid cpf")); 
+});
+
+test("Não deve criar uma conta com placa do carro inválida", function () {
+    expect(() => Account.create("John Doe", "johndoe@gmail.com", "97456321558", "AAA99", "123456", false, true)).toThrow(new Error("Invalid car plate")); 
+});

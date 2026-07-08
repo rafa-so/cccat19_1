@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import GetAccount from "./GetAccount";
-import AccountDAODatabase from "./data";
+import AccountDAODatabase from "./AccountRepository";
 import Signup from "./Signup";
 import { MailerGatewayMemory } from "./MailerGateway";
 

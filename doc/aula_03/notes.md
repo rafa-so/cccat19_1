@@ -61,3 +61,9 @@ O `objeto anêmico` é um antipadrão onde as entidades não possuem comportamen
 
 #### Encapsulamento
 consiste na proteção, ou "esconder" certos comportamentos, para que outros recursos estejam disponíveis.
+
+### DAO x Repository
+DAO (Data Access Object) é um padrão de projeto que tem como objetivo abstratir o acesso a dados, e é mais relacionado a persistência de dados. Já o Repository é um padrão de projeto que tem como objetivo abstrair o acesso a dados, mas é mais relacionado a regras de negócio.
+
+A ideia do repository é trabalhar com entidade, e não com dados, como o DAO. O repository é mais relacionado a regras de negócio, enquanto o DAO é mais relacionado a persistência de dados.
+
