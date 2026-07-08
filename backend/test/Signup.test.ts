@@ -31,10 +31,10 @@ test("Deve criar uma conta de passageiro", async function() {
 
     // Then
     expect(responseSignup.accountId).toBeDefined();
-    expect(responseGetAccount.name).toBe(input.name);
-    expect(responseGetAccount.email).toBe(input.email);
-    expect(responseGetAccount.cpf).toBe(input.cpf);
-    expect(responseGetAccount.isPassenger).toBe(input.isPassenger);
+    expect(responseGetAccount?.name).toBe(input.name);
+    expect(responseGetAccount?.email).toBe(input.email);
+    expect(responseGetAccount?.cpf).toBe(input.cpf);
+    expect(responseGetAccount?.isPassenger).toBe(input.isPassenger);
 });
 
 // test("Deve criar uma conta de passageiro com stub", async function() {
@@ -168,12 +168,12 @@ test("Deve criar uma conta de motorista", async function() {
     const responseGetAccount = await getAccount.execute(responseSignup.accountId);
 
     expect(responseSignup.accountId).toBeDefined();
-    expect(responseGetAccount.name).toBe(input.name);
-    expect(responseGetAccount.email).toBe(input.email);
-    expect(responseGetAccount.cpf).toBe(input.cpf);
-    expect(responseGetAccount.isPassenger).toBe(input.isPassenger);
-    expect(responseGetAccount.isDriver).toBe(input.isDriver);
-    expect(responseGetAccount.carPlate).toBe(input.carPlate);
+    expect(responseGetAccount?.name).toBe(input.name);
+    expect(responseGetAccount?.email).toBe(input.email);
+    expect(responseGetAccount?.cpf).toBe(input.cpf);
+    expect(responseGetAccount?.isPassenger).toBe(input.isPassenger);
+    expect(responseGetAccount?.isDriver).toBe(input.isDriver);
+    expect(responseGetAccount?.carPlate).toBe(input.carPlate);
 });
 
 test("Não deve criar uma conta de passageiro com o nome inválido", async function() {

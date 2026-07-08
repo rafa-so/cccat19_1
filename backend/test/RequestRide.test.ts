@@ -1,8 +1,8 @@
 import { beforeEach, test, expect } from "@jest/globals";
-import AccountDAODatabase from "../src/AccountRepository";
+import AccountRepositoryDatabase from "../src/AccountRepository";
 import Signup from "../src/Signup";
 import { MailerGatewayMemory } from "../src/MailerGateway";
-import RideDAODatabase from "../src/RideDAO.ts";
+import RideRepositoryDatabase from "../src/RideRepository";
 import RequestRide from "../src/RequestRide";
 import GetRide from "../src/GetRide";
 
@@ -11,13 +11,13 @@ let requestRide: RequestRide;
 let getRide: GetRide;
 
 beforeEach(() => {
-    const accountDAO = new AccountDAODatabase();
-    const rideDAO = new RideDAODatabase();
+    const accountRepository = new AccountRepositoryDatabase();
+    const rideRepository = new RideRepositoryDatabase();
     // const accountDAO = new AccountDAOMemory();
     const mailerGareway = new MailerGatewayMemory();
-    signup = new Signup(accountDAO, mailerGareway);
-    requestRide = new RequestRide(accountDAO, rideDAO);
-    getRide = new GetRide(accountDAO, rideDAO);
+    signup = new Signup(accountRepository, mailerGareway);
+    requestRide = new RequestRide(accountRepository, rideRepository);
+    getRide = new GetRide(accountRepository, rideRepository);
 })
 
 test("Deve solicitar uma corrida", async function() {
