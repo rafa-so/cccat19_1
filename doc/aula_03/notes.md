@@ -75,3 +75,15 @@ E a ponte que ponte que conecta a aplicação com o mundo exterior. Ele garante 
 
 ---
 
+## Camadas
+Camadas são separações lógicas de contexto e responsabilidade. Camadas e pastas são coisas completamente diferentes.
+
+### Inicialização da Aplicação
+O <i>main</i>  é o <u>ponto de entrada </u> da aplicação (HTTP, CLI, UI, Testes), é l´aque as fábricas e estratégias são inicializadas e as injeções de dependência são realizadas durante a inicialização.
+
+Existe um padrão de projeto inclusive para a inicialização da aplicação chamado `Composition Root`. Quanto mais fraca é o acoplamento entre os recursos inicializados e camadas da aplicação, mais perto do root da aplicação eles devem estar. 
+
+É neste contexto que vamos fazer todo o gráfico de inicialização da aplicação, onde um recurso depende fracamente de outro.
+
+> As dependências devem ser resolvidas o mais próximo possível do entrypoint da aplicação.
+
