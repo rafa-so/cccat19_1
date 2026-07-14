@@ -87,3 +87,10 @@ Existe um padrão de projeto inclusive para a inicialização da aplicação cha
 
 > As dependências devem ser resolvidas o mais próximo possível do entrypoint da aplicação.
 
+#### Estrutura de Pastas
+src 
+    - application
+        -> usecase
+    - domain
+    - infra
+
