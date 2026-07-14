@@ -1,6 +1,5 @@
-import pgp from "pg-promise";
-import Ride from "./Ride";
-import DatabaseConnection from "./DatabaseConnection";
+import Ride from "../../domain/Ride";
+import DatabaseConnection from "../../DatabaseConnection";
 
 export interface RideRepository {
     saveRide(ride: Ride): Promise<void>;

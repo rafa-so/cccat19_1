@@ -1,11 +1,11 @@
 import { beforeEach, test, expect, afterEach } from "@jest/globals";
-import AccountRepositoryDatabase from "../src/AccountRepository";
-import Signup from "../src/Signup";
-import { MailerGatewayMemory } from "../src/MailerGateway";
-import RideRepositoryDatabase from "../src/RideRepository";
-import RequestRide from "../src/RequestRide";
-import GetRide from "../src/GetRide";
-import { PgPromiseAdapter } from "../src/DatabaseConnection";
+import AccountRepositoryDatabase from "../../src/infra/repository/AccountRepository";
+import Signup from "../../src/application/usecase/Signup";
+import { MailerGatewayMemory } from "../../src/infra/gateway/MailerGateway";
+import RideRepositoryDatabase from "../../src/infra/repository/RideRepository";
+import RequestRide from "../../src/application/usecase/RequestRide";
+import GetRide from "../../src/application/usecase/GetRide";
+import { PgPromiseAdapter } from "../../src/DatabaseConnection";
 
 let connection: PgPromiseAdapter;
 let signup: Signup;

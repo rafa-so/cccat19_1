@@ -1,10 +1,10 @@
-import GetAccount from "./GetAccount";
-import AccountRepositoryDatabase from "./AccountRepository";
-import Signup from "./Signup";
-import { MailerGatewayMemory } from "./MailerGateway";
+import GetAccount from "./application/usecase/GetAccount";
+import AccountRepositoryDatabase from "./infra/repository/AccountRepository";
+import Signup from "./application/usecase/Signup";
+import { MailerGatewayMemory } from "./infra/gateway/MailerGateway";
 import { PgPromiseAdapter } from "./DatabaseConnection";
-import { ExpressAdapter, HapiAdapter } from "./HttpServer";
-import AccountController from "./AccountController";
+import { ExpressAdapter, HapiAdapter } from "./infra/http/HttpServer";
+import AccountController from "./infra/controller/AccountController";
 
 const httpServer = new ExpressAdapter();
 const connection = new PgPromiseAdapter();

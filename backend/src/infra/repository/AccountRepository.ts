@@ -1,6 +1,5 @@
-import pgp from "pg-promise";
-import Account from "./Account";
-import DatabaseConnection from "./DatabaseConnection";
+import Account from "../../domain/Account";
+import DatabaseConnection from "../../DatabaseConnection";
 
 export interface AccountRepository {
     getAccountById(accountId: string): Promise<Account | undefined>;

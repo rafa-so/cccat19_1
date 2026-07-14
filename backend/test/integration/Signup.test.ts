@@ -1,10 +1,9 @@
 import { beforeEach, test, expect, afterEach } from "@jest/globals";
-import sinon from "sinon";
-import AccountDAODatabase from "../src/AccountRepository";
-import GetAccount from "../src/GetAccount";
-import Signup from "../src/Signup";
-import { MailerGatewayMemory } from "../src/MailerGateway";
-import { PgPromiseAdapter } from "../src/DatabaseConnection";
+import AccountDAODatabase from "../../src/infra/repository/AccountRepository";
+import GetAccount from "../../src/application/usecase/GetAccount";
+import Signup from "../../src/application/usecase/Signup";
+import { MailerGatewayMemory } from "../../src/infra/gateway/MailerGateway";
+import { PgPromiseAdapter } from "../../src/DatabaseConnection";
 
 let connection: PgPromiseAdapter;
 let signup: Signup;
