@@ -1,18 +1,21 @@
-import { beforeEach, test, expect } from "@jest/globals";
+import { beforeEach, test, expect, afterEach } from "@jest/globals";
 import AccountRepositoryDatabase from "../src/AccountRepository";
 import Signup from "../src/Signup";
 import { MailerGatewayMemory } from "../src/MailerGateway";
 import RideRepositoryDatabase from "../src/RideRepository";
 import RequestRide from "../src/RequestRide";
 import GetRide from "../src/GetRide";
+import { PgPromiseAdapter } from "../src/DatabaseConnection";
 
+let connection: PgPromiseAdapter;
 let signup: Signup;
 let requestRide: RequestRide;
 let getRide: GetRide;
 
 beforeEach(() => {
-    const accountRepository = new AccountRepositoryDatabase();
-    const rideRepository = new RideRepositoryDatabase();
+    connection = new PgPromiseAdapter();
+    const accountRepository = new AccountRepositoryDatabase(connection);
+    const rideRepository = new RideRepositoryDatabase(connection);
     // const accountDAO = new AccountDAOMemory();
     const mailerGareway = new MailerGatewayMemory();
     signup = new Signup(accountRepository, mailerGareway);
@@ -93,4 +96,8 @@ test("Não pode solicitar uma corrida se já tiver outra ativa", async function(
 
     await requestRide.execute(inputRequestRide)
     await expect(() => requestRide.execute(inputRequestRide)).rejects.toThrow(new Error("Passenger already have an active ride"));
+});
+
+afterEach(async () => {
+    await connection.close();
 });

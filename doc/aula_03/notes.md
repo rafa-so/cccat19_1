@@ -68,3 +68,10 @@ DAO (Data Access Object) é um padrão de projeto que tem como objetivo abstrati
 A ideia do repository é trabalhar com entidade, e não com dados, como o DAO. O repository é mais relacionado a regras de negócio, enquanto o DAO é mais relacionado a persistência de dados.
 
 ### Interface Adapter
+E a ponte que ponte que conecta a aplicação com o mundo exterior. Ele garante que a inferface externa seja respeitada e que a aplicação não dependa de detalhes de implementação de frameworks, banco de dados, etc.
+
+---
+> Por fim, os frameworks and drivers são o *nível mais baixo de abstração*, <u>é a interação com a tecnologia, com os componentes que realizam a conexão com o banco de dados, as requisições HTTP, a interação com o sistema de arquivos ou o acesso aos recursos do sistema operacional</u>.
+
+---
+

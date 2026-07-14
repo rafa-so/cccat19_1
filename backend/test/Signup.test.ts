@@ -1,19 +1,26 @@
-import { beforeEach, test, expect } from "@jest/globals";
+import { beforeEach, test, expect, afterEach } from "@jest/globals";
 import sinon from "sinon";
 import AccountDAODatabase from "../src/AccountRepository";
 import GetAccount from "../src/GetAccount";
 import Signup from "../src/Signup";
 import { MailerGatewayMemory } from "../src/MailerGateway";
+import { PgPromiseAdapter } from "../src/DatabaseConnection";
 
+let connection: PgPromiseAdapter;
 let signup: Signup;
 let getAccount: GetAccount;
 
 beforeEach(() => {
-    const accountDAO = new AccountDAODatabase();
+    connection = new PgPromiseAdapter();
+    const accountDAO = new AccountDAODatabase(connection);
     const mailerGareway = new MailerGatewayMemory();
     signup = new Signup(accountDAO, mailerGareway);
     getAccount = new GetAccount(accountDAO);
-})
+});
+
+afterEach(async () => {
+    await connection.close();
+});
 
 test("Deve criar uma conta de passageiro", async function() {
     // Given
