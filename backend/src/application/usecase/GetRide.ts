@@ -7,7 +7,7 @@ export default class GetRide {
     async execute(rideId: any): Promise<Output> {
         const ride = await this.rideRepository.getRideById(rideId);
         const passengerAccount = await this.accountRepository.getAccountById(ride.passengerId);
-        return { ...ride, passengerName: passengerAccount?.name ?? '' };
+        return { ...ride, passengerName: passengerAccount?.getName() ?? '' };
     }
 }
 
