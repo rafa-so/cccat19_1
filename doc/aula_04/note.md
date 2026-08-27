@@ -68,3 +68,35 @@ Também contém regras de negócio independentes, no entanto `são identificados
 > `Obsessão Primitiva`: É um code smell, onde ao invés de usar o wrapper para encapsular operações referentes a um determinado valor, o desenvolvedor utiliza sempre tipos primitivos, para representação deixando a lógica de manipulação do valor espelhada e duplicada pelo código.
 
 A identificação de possíveis candidatos para `Value Objects` seria olhar e substituir alguns tipos primitivos que estão pela aplicação "jogados".
+
+###### Entities <E>
+Abstraem regras de negócio ndependentes, tem identidade e estado, podendo sofre <u>mutação ao longo do tempo</u>.
+
+**Exemplos**
+- `Account`: O passageiro ou motorista pode ter a sua conta bloqueada,  placa do carro modificada, a senha redefinida
+
+- `Ride`: Uma corrida pode ter o status em andamento ou finalizada, após ser finalizada o valor da tarifa é atualizado
+
+**Como gerar identidade?**
+- `Manualmente`: O próprio usuário pode gerar a identidade da entidade, pro exemplo, utilizando o email ou um documento de identificação.
+- `Aplicação`: A aplicação pode utilizar um algoritmo para gerar a identidade como um gerador de UUID.
+- `Banco de dados`: O banco de dados por meio de uma sequência ou outro tipo de registro, centralizando a geração da identidade.
+
+---
+> Um `Value Object`é restrito a uma `entity` ou <u>pode ser utilizado em vários lugares</u>?
+---
+
+##### Domain Service (DS)
+
+`Realiza tarefas específicas do domínio`, não tendo estado. <u>É indicado quando a operação que você quer executar não pertence a uma entity ou a um value object</ul>.
+
+**Exemplos**
+ - `DistanceCalculator`: Pegando duas coordenadas retorna a distância.
+ - `FareCalculator`: Calcula o valor de um segmento da corrida.
+ - `TokenGenerator`: Gera um token de acordo com um email
+
+> Utilize em operações que envolvem multiplos objetos de domínio
+
+Normalmente quando uma operação afeta `multiplos objetos de domínio`, não pertencendo a nenhum deles, <u>ela deve ser descrita em um domain service</u>.
+
+> Não crie `serviços no lugar de entities e value objects`, <u>favorecendo um modelo anêmico</u>.
