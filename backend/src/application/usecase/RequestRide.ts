@@ -1,6 +1,6 @@
 import { AccountRepository } from "../../infra/repository/AccountRepository";
 import { RideRepository } from "../../infra/repository/RideRepository";
-import Ride from "../../domain/Ride";
+import Ride from "../../domain/entity/Ride";
  
 export default class RequestRide {
     constructor(readonly accountRepository: AccountRepository, readonly rideRepository: RideRepository) {}
@@ -12,7 +12,8 @@ export default class RequestRide {
         if (hasActiveRide) throw new Error("Passenger already have an active ride");
         const ride = Ride.create(input.passengerId, input.fromLat, input.fromLong, input.toLat, input.toLong);
         await this.rideRepository.saveRide(ride);
-        return { rideId: ride.rideId }
+        console.log("Ride created with ID:", ride.getRideId());
+        return { rideId: ride.getRideId() }
     }
 }
 

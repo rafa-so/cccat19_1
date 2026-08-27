@@ -1,10 +1,13 @@
-import Ride from "../../domain/Ride";
+import Ride from "../../domain/entity/Ride";
 import DatabaseConnection from "../../DatabaseConnection";
+import Position from "../../domain/entity/Position";
 
 export interface RideRepository {
     saveRide(ride: Ride): Promise<void>;
+    updateRide(ride: Ride): Promise<void>;
     getRideById(rideId: string): Promise<Ride>;
     hasActiveRideByPassengerId(passengerId: string): Promise<boolean>;
+    hasActiveRideByDriverId(driverId: string): Promise<boolean>;
 }
 
 export default class RideRepositoryDatabase implements RideRepository {
@@ -13,6 +16,12 @@ export default class RideRepositoryDatabase implements RideRepository {
 
     async getRideById(rideId: string): Promise<Ride> {
         const [rideData] = await this.connection.query("SELECT * FROM ccca.ride WHERE ride_id = $1", [ rideId ]);
+        const positions = [];
+        const positionsData = await this.connection.query("SELECT * FROM ccca.position WHERE ride_id = $1", [rideId]);
+        for (const position of positionsData) {
+            positions.push(new Position(position.position_id, position.ride_id, position.lat, position.long, position.date));
+        }
+
         return new Ride(
             rideData.ride_id,
             rideData.passenger_id,
@@ -24,18 +33,33 @@ export default class RideRepositoryDatabase implements RideRepository {
             parseFloat(rideData.fare),
             parseFloat(rideData.distance),
             rideData.status,
-            rideData.date
+            rideData.date,
+            positions
         );
     }
 
     async saveRide(ride: Ride) {
         await this.connection.query("insert into ccca.ride (ride_id, passenger_id, driver_id, from_lat, from_long, to_lat, to_long, fare, distance, status, date) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)", 
-            [ride.rideId, ride.passengerId, ride.driverId, ride.fromLat, ride.fromLong, ride.toLat, ride.toLong, ride.fare, ride.distance, ride.status, ride.date]
+            [ride.getRideId(), ride.getPassengerId(), ride.getDriverId(), ride.getFrom().getLat(), ride.getFrom().getLong(), ride.getTo().getLat(), ride.getTo().getLong(), ride.fare, ride.distance, ride.getStatus(), ride.date]
         );
+    }
+
+    async updateRide(ride: Ride) {
+        await this.connection.query("UPDATE ccca.ride SET status = $1, driver_id = $2 WHERE ride_id = $3", [ride.getStatus(), ride.getDriverId(), ride.getRideId()]);
+        await this.connection.query("DELETE FROM ccca.position where ride_id = $1", [ride.getRideId()])
+        for (const position of ride.positions) {
+            await this.connection.query("INSERT INTO ccca.position (position_id, ride_id, lat, long, date) VALUES ($1, $2, $3, $4, $5)", 
+                [position.getPositionId(), position.getRideId(), position.getCoord().getLat(), position.getCoord().getLong(), position.date]);
+        }
     }
 
     async hasActiveRideByPassengerId(passengerId: string) {
         const [rideData] = await this.connection.query("SELECT 1 FROM ccca.ride WHERE passenger_id = $1 AND status NOT IN ('completed', 'cancelled') LIMIT 1", [ passengerId ]);
+        return !!rideData;
+    }
+
+    async hasActiveRideByDriverId(driverId: string) {
+        const [rideData] = await this.connection.query("SELECT 1 FROM ccca.ride WHERE driver_id = $1 AND status NOT IN ('completed', 'cancelled') LIMIT 1", [ driverId ]);
         return !!rideData;
     }
 }
