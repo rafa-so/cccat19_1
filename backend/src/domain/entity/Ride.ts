@@ -2,6 +2,7 @@ import crypto from "crypto";
 import Coord from "../vo/Coord";
 import UUID from "../vo/UUID";
 import Position from "./Position";
+import DistanceCalculator from "../service/DistanceCalculator";
 
 export default class Ride {
     private rideId: UUID;
@@ -62,7 +63,7 @@ export default class Ride {
         for (const [index, position] of this.positions.entries()) {
             const nextPosition = this.positions[index + 1];
             if (!nextPosition) break;
-            distance += this.calculateDistance(position.getCoord(), nextPosition.getCoord());
+            distance += DistanceCalculator.calculate(position.getCoord(), nextPosition.getCoord());
         }
 
         return distance;
@@ -90,20 +91,5 @@ export default class Ride {
 
     getStatus() {
         return this.status;
-    }
-
-    calculateDistance(from: Coord, to: Coord) {
-        const earthRadius = 6371;
-        const degreesToRadians = Math.PI / 180;
-        const deltaLat = (to.getLat() - from.getLat()) * degreesToRadians;
-        const deltaLong = (to.getLong() - from.getLong()) * degreesToRadians;
-        const a = 
-            Math.sin(deltaLat / 2) ** 2 + 
-            Math.cos(from.getLat() * degreesToRadians) * 
-            Math.cos(to.getLat() * degreesToRadians) * 
-            Math.sin(deltaLong / 2) ** 2;
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = earthRadius * c;
-        return Math.round(distance);
     }
 }
