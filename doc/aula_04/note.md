@@ -88,7 +88,7 @@ Abstraem regras de negócio ndependentes, tem identidade e estado, podendo sofre
 
 ##### Domain Service (DS)
 
-`Realiza tarefas específicas do domínio`, não tendo estado. <u>É indicado quando a operação que você quer executar não pertence a uma entity ou a um value object</ul>.
+`Realiza tarefas específicas do domínio`, não tendo estado. <u>É indicado quando a operação que você quer executar não pertence a uma entity ou a um value object</u>.
 
 **Exemplos**
  - `DistanceCalculator`: Pegando duas coordenadas retorna a distância.
@@ -100,3 +100,64 @@ Abstraem regras de negócio ndependentes, tem identidade e estado, podendo sofre
 Normalmente quando uma operação afeta `multiplos objetos de domínio`, não pertencendo a nenhum deles, <u>ela deve ser descrita em um domain service</u>.
 
 > Não crie `serviços no lugar de entities e value objects`, <u>favorecendo um modelo anêmico</u>.
+
+Como definir `relationamento`entre diferentes objetos de domínios?
+
+> A relação de objetos de domínio não é a mesma utilizada no banco de dados
+
+#### Aggregate
+
+Um aggregate é um `agrupamento, ou cluster, de objetos de domínio como entities e value objets`, estabelecendo o <u>relacionamento entre eles</u>.
+
+Grandes aggregates podem trazer `desperdício de memória, além de sobrecarregar o banco de dados sem necessidade` já que <u>nem sempre a camada de aplicação estará interessada em utiliza-lo na íntegra</u>.
+
+> O desafio é `balancear` a <u> preservação da invariância com o consumo de recursos</u>.
+
+Todas as operações são realizadas por meio da raíz, que é uma entity ou aggregate root.
+
+> Aggregate é um conceito virtual. Não tem arquivo ou item aggregate. O aggregate é o objeto de domínio mais importante. 
+
+**Boas Práticas**
+- `Crie aggregates pequenos`: Comece sempre com apenas uma entidade e cresça de acordo com as necessidades.
+
+- `Referencie outros aggregates por identidade`: Mantenha apenas a referência para outros aggregates, isso reduz a quantidade de memória e o esforço que o repositório faz para recupera-los.
+
+Se estiver difícil de implementar o repositório, `talvez o aggregate seja muito grande` e <u>possa ser separado</u>.
+
+Todo o aggregate deve refletir os modelos da base de dados?
+
+Isso faria o aggregate ser `muito grande e consumir muita memória`, <u> tornando o repository mais complexo do que deveria</u>.
+
+
+O aggregate pode referenciar outros aggregates? Sim, mas por identidade, nunca por referência direta.
+
+Um aggregate pode ter apenas uma entidade? Pode, quanto menor melhor.
+
+> Nenhuma entidade fica solta e flutuante no espaço sem pertencer a um aggregate. Se ela não está presente em nenhum aggregate, ela provavelmente é o próprio aggregate.
+
+Uma entidade que faz parte de um aggregate pode fazer parte de outro? Não faz muito sentido, `uma mudança na entidade utilizada por um aggregate poderia causar a quebra em outro `.
+
+Repositories
+
+É uma extensão do domínio responsável por realizar a persistência dos aggregates, separando o domínio da infraestrutura. Tudo o que é manipulado pelo `repository` são aggregates. Eles não manipulam nem entidade diretamente e nem value objects. Eles são um intermediário entre o domínio e a camada de infraestrutura (camada de dados mais especificamente).
+
+Diferença entre `repository` e o `DAO`.
+
+Um repository lida a persistência de um `aggregate inteiro`, enquanto um DAO não tem uma granularidade definida.
+
+Posso obter apenas parte do aggregate?
+
+`Isso significa que pode ser que o aggregate seja grande mais` e poderia ser quebrado em aggregates menores.
+
+Posso utilizar lazy loading dentro do aggregate?
+
+`A preservação da invariância depende da integridade do aggregate`, se parte dele não estier populado pode perder o sentido.
+
+É possível utilizar diferentes filtros para obter um aggregate?
+
+Com certeza, na obtenção do aggregate diversos `filtros podem ser utilizados`.
+
+Posso gerar dados para a emissão de um relatório a partir de um repository?
+
+`A granularidade de um relatório é diferente da utilizada pelo aggregate e renderizar relatórios a  partir de repositories pode ser excessivamente complexto`, prefira a utilização de CQRS com a criação de consultas separadas.
+
