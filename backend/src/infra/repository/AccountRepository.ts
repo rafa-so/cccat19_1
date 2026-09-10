@@ -1,4 +1,4 @@
-import Account from "../../domain/Account";
+import Account from "../../domain/entity/Account";
 import DatabaseConnection from "../../DatabaseConnection";
 
 export interface AccountRepository {
@@ -43,7 +43,7 @@ export default class AccountRepositoryDatabase implements AccountRepository {
 
     async saveAccount(account: Account) {
         await this.connection.query("insert into ccca.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver, password) values ($1, $2, $3, $4, $5, $6, $7, $8)", 
-            [account.accountId, account.name, account.email, account.cpf, account.carPlate, !!account.isPassenger, !!account.isDriver, account.password]
+            [account.getAccountId(), account.getName(), account.getEmail(), account.getCpf(), account.getCarPlate(), !!account.isPassenger, !!account.isDriver, account.getPassword()]
         );
     }
 }
@@ -56,11 +56,11 @@ export class AccountRepositoryMemory implements AccountRepository {
     }
 
     async getAccountByEmail(email: string) {
-        return this.accounts.find((account: Account) => account.email === email);
+        return this.accounts.find((account: Account) => account.getEmail() === email);
     }
 
     async getAccountById(accountId: string) {
-        return this.accounts.find((account: Account) => account.accountId === accountId);
+        return this.accounts.find((account: Account) => account.getAccountId() === accountId);
     }
 
     async saveAccount(account: Account) {

@@ -1,5 +1,5 @@
-import { validateCpf } from "../../src/domain/validateCpf";
-
+import { expect, test } from "@jest/globals";
+import Cpf from "../../src/domain/vo/Cpf";
 
 test.each([
 	"97456321558",
@@ -7,8 +7,7 @@ test.each([
 	"71428793860",
 	"87748248800"
 ])("Deve validar o cpf %s", function (cpf: any) {
-	const isValid = validateCpf(cpf);
-	expect(isValid).toBe(true);
+	expect((new Cpf(cpf)).getValue()).toBe(cpf)
 });
 
 test.each([
@@ -17,6 +16,5 @@ test.each([
 	"",
 	"11111111111"
 ])("Não deve validar o cpf %s", function (cpf: any) {
-	const isValid = validateCpf(cpf);
-	expect(isValid).toBe(false);
+	expect(() => new Cpf(cpf)).toThrow(new Error("Invalid cpf"));
 });
