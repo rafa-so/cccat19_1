@@ -1,8 +1,6 @@
 import crypto from "crypto";
 import Coord from "../vo/Coord";
 import UUID from "../vo/UUID";
-import Position from "./Position";
-import DistanceCalculator from "../service/DistanceCalculator";
 
 export default class Ride {
     private rideId: UUID;
@@ -22,8 +20,7 @@ export default class Ride {
         readonly fare: number,
         readonly distance: number,
         private status: string,
-        readonly date: Date,
-        readonly positions: Position[]
+        readonly date: Date
     ){
         this.rideId = new UUID(rideId);
         this.passengerId = new UUID(passengerId);
@@ -33,14 +30,13 @@ export default class Ride {
         this.to = new Coord(toLat, toLong);
     }
 
-
     static create(passengerId: string, fromLat: number, fromLong: number, toLat: number, toLong: number) {
         const rideId = crypto.randomUUID();
         const fare = 0;
         const distance = 0;
         const date = new Date();
         const status = 'requested';
-        return new Ride(rideId, passengerId, null, fromLat, fromLong, toLat, toLong, fare, distance, status, date, []);
+        return new Ride(rideId, passengerId, null, fromLat, fromLong, toLat, toLong, fare, distance, status, date);
     }
 
     accept(driverId: string) {
@@ -54,19 +50,8 @@ export default class Ride {
         this.status = 'in_progress';
     }
 
-    updatePosition(position: Position) {
-        this.positions.push(position);
-    }
-
     getDistance() {
-        let distance = 0;
-        for (const [index, position] of this.positions.entries()) {
-            const nextPosition = this.positions[index + 1];
-            if (!nextPosition) break;
-            distance += DistanceCalculator.calculate(position.getCoord(), nextPosition.getCoord());
-        }
-
-        return distance;
+        return this.distance;
     }
 
     getRideId() {

@@ -9,6 +9,7 @@ import { PgPromiseAdapter } from "../../src/DatabaseConnection";
 import AcceptRide from "../../src/application/usecase/AcceptRide";
 import StartRide from "../../src/application/usecase/StartRide";
 import UpdatePosition from "../../src/application/usecase/UpdatePosition";
+import { PositionRepositoryDatabase } from "../../src/infra/repository/PositionRepository";
 
 let connection: PgPromiseAdapter;
 let signup: Signup;
@@ -17,18 +18,20 @@ let getRide: GetRide;
 let acceptRide: AcceptRide;
 let startRide: StartRide;
 let updatePosition: UpdatePosition;
+let positionRepository: PositionRepositoryDatabase;
 
 beforeEach(() => {
     connection = new PgPromiseAdapter();
     const accountRepository = new AccountRepositoryDatabase(connection);
     const rideRepository = new RideRepositoryDatabase(connection);
+    positionRepository = new PositionRepositoryDatabase(connection);
     const mailerGareway = new MailerGatewayMemory();
     signup = new Signup(accountRepository, mailerGareway);
     requestRide = new RequestRide(accountRepository, rideRepository);
-    getRide = new GetRide(accountRepository, rideRepository);
+    getRide = new GetRide(accountRepository, rideRepository, positionRepository);
     acceptRide = new AcceptRide(accountRepository, rideRepository)
     startRide = new StartRide(rideRepository);
-    updatePosition = new UpdatePosition(rideRepository);
+    updatePosition = new UpdatePosition(rideRepository, positionRepository);
 })
 
 test("Deve iniciar uma corrida", async function() {
